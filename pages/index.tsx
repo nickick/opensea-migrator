@@ -1,10 +1,15 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
 import fsPromises from 'fs/promises';
-import path from 'path'
-import styles from '../styles/Home.module.css'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import path from 'path';
+import { config } from 'process';
+import { useState } from 'react';
+import DiscordIcon from '../src/components/DiscordIcon';
+import EtherscanIcon from '../src/components/EtherscanIcon';
+import ExplanationModal from '../src/components/ExplanationModal';
 import InfoIcon from '../src/components/InfoIcon';
+import TwitterIcon from '../src/components/TwitterIcon';
+import styles from '../styles/Home.module.css';
 
 type Props = {
   name: string
@@ -25,7 +30,8 @@ type Props = {
 }
 
 const Home: NextPage<Props> = (props: Props) => {
-  console.log(props.styles.textHighlighStyle)
+  const [ open, setOpen ] = useState(false)
+
   return (
     <div
       className='min-h-screen'
@@ -65,24 +71,50 @@ const Home: NextPage<Props> = (props: Props) => {
             }}>
               Learn more about the migration process here:
             </span>
-            <span className='ml-2 cursor-pointer'>
+            <span
+              className='ml-2 cursor-pointer'
+              onClick={() => setOpen(true)}
+            >
               <InfoIcon color={props.styles.textColor} />
             </span>
+            <ExplanationModal open={open} setOpen={setOpen} text={props.migrationProcessDescription} />
           </p>
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-
-          </span>
-        </a>
+      <footer>
+        <div className='flex justify-end max-w-screen-lg mx-auto'>
+          {props.socials.discordUrl && (
+            <a
+              href={props.socials.discordUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className='block w-10'
+            >
+              <DiscordIcon />
+            </a>
+          )}
+          {props.socials.etherscanUrl && (
+            <a
+              href={props.socials.etherscanUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className='block w-4 ml-8'
+            >
+              <EtherscanIcon />
+            </a>
+          )}
+          {props.socials.twitterUrl && (
+            <a
+              href={props.socials.twitterUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className='block w-4 ml-8'
+            >
+              <TwitterIcon />
+            </a>
+          )}
+        </div>
       </footer>
     </div>
   )
