@@ -2,7 +2,7 @@ const InfoIcon = ({
   color = '#ffffff'
 }: {color?: string}) => (
   <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Icons" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g id="Rounded" transform="translate(-850.000000, -332.000000)">
             <g id="Action" transform="translate(100.000000, 100.000000)">
                 <g id="-Round-/-Action-/-info" transform="translate(748.000000, 230.000000)">
