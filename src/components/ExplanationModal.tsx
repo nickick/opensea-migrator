@@ -1,21 +1,26 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Dialog, Transition } from '@headlessui/react'
-import { Dispatch, Fragment, SetStateAction, useRef } from 'react'
+import { Dialog, Transition } from "@headlessui/react";
+import { Dispatch, Fragment, SetStateAction, useRef } from "react";
 
 export default function ExplanationModal({
   setOpen,
   open,
   text,
 }: {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
-  text: string[]
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  text: string[];
 }) {
-  const cancelButtonRef = useRef(null)
+  const cancelButtonRef = useRef(null);
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        initialFocus={cancelButtonRef}
+        onClose={setOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -43,19 +48,20 @@ export default function ExplanationModal({
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                      <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                      <Dialog.Title
+                        as="h3"
+                        className="text-lg font-medium leading-6 text-gray-900"
+                      >
                         How Migration Works
                       </Dialog.Title>
                       <div className="mt-2 space-y-4 text-sm text-gray-500">
-                        {
-                          text.map((textString) => {
-                            return (
-                              <p key={textString} className='mt-2'>
-                                {textString}
-                              </p>
-                            )
-                          })
-                        }
+                        {text.map((textString) => {
+                          return (
+                            <p key={textString} className="mt-2">
+                              {textString}
+                            </p>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -76,5 +82,5 @@ export default function ExplanationModal({
         </div>
       </Dialog>
     </Transition.Root>
-  )
+  );
 }
