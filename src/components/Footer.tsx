@@ -1,6 +1,6 @@
-import DiscordIcon from "src/components/DiscordIcon";
-import EtherscanIcon from "src/components/EtherscanIcon";
-import TwitterIcon from "src/components/TwitterIcon";
+import DiscordIcon from 'src/components/DiscordIcon';
+import EtherscanIcon from 'src/components/EtherscanIcon';
+import TwitterIcon from 'src/components/TwitterIcon';
 
 type FooterProps = {
   discordUrl?: string;

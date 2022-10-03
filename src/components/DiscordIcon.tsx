@@ -1,4 +1,4 @@
-const DiscordIcon = ({ color = "#ffffff" }: { color?: string }) => (
+const DiscordIcon = ({ color = '#ffffff' }: { color?: string }) => (
   <svg
     width="71"
     height="30"

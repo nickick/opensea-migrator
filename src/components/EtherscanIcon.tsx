@@ -1,4 +1,4 @@
-const EtherscanIcon = ({ color = "#ffffff" }: { color?: string }) => (
+const EtherscanIcon = ({ color = '#ffffff' }: { color?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="30"

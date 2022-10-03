@@ -1,4 +1,4 @@
-const TwitterIcon = ({ color = "#ffffff" }: { color?: string }) => (
+const TwitterIcon = ({ color = '#ffffff' }: { color?: string }) => (
   <svg
     version="1.1"
     id="Logo"

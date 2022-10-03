@@ -1,6 +1,6 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Dialog, Transition } from "@headlessui/react";
-import { Dispatch, Fragment, SetStateAction, useRef } from "react";
+import { Dialog, Transition } from '@headlessui/react';
+import { Dispatch, Fragment, SetStateAction, useRef } from 'react';
 
 export default function ExplanationModal({
   setOpen,

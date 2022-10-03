@@ -1,11 +1,11 @@
-import fsPromises from "fs/promises";
-import type { NextPage } from "next";
-import Head from "next/head";
-import path from "path";
-import { useState } from "react";
-import Footer from "src/components/Footer";
-import ExplanationModal from "src/components/ExplanationModal";
-import InfoIcon from "src/components/InfoIcon";
+import fsPromises from 'fs/promises';
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import path from 'path';
+import { useState } from 'react';
+import Footer from 'src/components/Footer';
+import ExplanationModal from 'src/components/ExplanationModal';
+import InfoIcon from 'src/components/InfoIcon';
 
 type Props = {
   name: string;
@@ -33,7 +33,7 @@ const Home: NextPage<Props> = (props: Props) => {
       className="min-h-screen"
       style={{
         backgroundImage: `url(${props.backgroundImage})`,
-        backgroundSize: "cover",
+        backgroundSize: 'cover',
       }}
     >
       <Head>
@@ -93,7 +93,7 @@ const Home: NextPage<Props> = (props: Props) => {
 export default Home;
 
 export async function getServerSideProps() {
-  const filePath = path.join(process.cwd(), "config.json");
+  const filePath = path.join(process.cwd(), 'config.json');
   const jsonData = await fsPromises.readFile(filePath);
   const stringData = jsonData.toString();
   const objectData = JSON.parse(stringData);

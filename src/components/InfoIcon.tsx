@@ -1,4 +1,4 @@
-const InfoIcon = ({ color = "#ffffff" }: { color?: string }) => (
+const InfoIcon = ({ color = '#ffffff' }: { color?: string }) => (
   <svg
     width="20px"
     height="20px"
