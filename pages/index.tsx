@@ -2,14 +2,13 @@ import fsPromises from 'fs/promises';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import path from 'path';
-import { config } from 'process';
 import { useState } from 'react';
+import Footer from 'src/components/Footer';
 import DiscordIcon from '../src/components/DiscordIcon';
 import EtherscanIcon from '../src/components/EtherscanIcon';
 import ExplanationModal from '../src/components/ExplanationModal';
 import InfoIcon from '../src/components/InfoIcon';
 import TwitterIcon from '../src/components/TwitterIcon';
-import styles from '../styles/Home.module.css';
 
 type Props = {
   name: string
@@ -82,40 +81,7 @@ const Home: NextPage<Props> = (props: Props) => {
         </div>
       </main>
 
-      <footer>
-        <div className='flex justify-end max-w-screen-lg mx-auto'>
-          {props.socials.discordUrl && (
-            <a
-              href={props.socials.discordUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className='block w-10'
-            >
-              <DiscordIcon />
-            </a>
-          )}
-          {props.socials.etherscanUrl && (
-            <a
-              href={props.socials.etherscanUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className='block w-4 ml-8'
-            >
-              <EtherscanIcon />
-            </a>
-          )}
-          {props.socials.twitterUrl && (
-            <a
-              href={props.socials.twitterUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className='block w-4 ml-8'
-            >
-              <TwitterIcon />
-            </a>
-          )}
-        </div>
-      </footer>
+      <Footer {...props.socials} />
     </div>
   )
 }
@@ -125,7 +91,7 @@ export default Home
 export async function getServerSideProps() {
   const filePath = path.join(process.cwd(), 'config.json');
   const jsonData = await fsPromises.readFile(filePath);
-  const stringData = jsonData.toString()
+  const stringData = jsonData.toString();
   const objectData = JSON.parse(stringData);
 
   return {
