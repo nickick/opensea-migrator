@@ -4,11 +4,8 @@ import Head from 'next/head';
 import path from 'path';
 import { useState } from 'react';
 import Footer from 'src/components/Footer';
-import DiscordIcon from '../src/components/DiscordIcon';
-import EtherscanIcon from '../src/components/EtherscanIcon';
-import ExplanationModal from '../src/components/ExplanationModal';
-import InfoIcon from '../src/components/InfoIcon';
-import TwitterIcon from '../src/components/TwitterIcon';
+import ExplanationModal from 'src/components/ExplanationModal';
+import InfoIcon from 'src/components/InfoIcon';
 
 type Props = {
   name: string
