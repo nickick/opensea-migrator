@@ -4,11 +4,11 @@ type Props = {
   moveToNextStep: () => void;
 };
 
-export default function ChoosePieces({ moveToNextStep }: Props) {
+const ChoosePieces: React.FunctionComponent<Props> = ({ moveToNextStep }) => {
   return (
     <div className="flex flex-col h-full items-start justify-between">
       <div>
-        <div className="text-2xl font-bold">1. Choose piece(s)</div>
+        <div className="text-2xl font-bold">Choose piece(s)</div>
         Some pieces
       </div>
       <div className="flex space-x-4 justify-self-end self-end">
@@ -16,4 +16,6 @@ export default function ChoosePieces({ moveToNextStep }: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default ChoosePieces;

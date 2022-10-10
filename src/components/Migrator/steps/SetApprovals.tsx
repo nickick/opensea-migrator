@@ -5,12 +5,15 @@ type Props = {
   moveToNextStep: () => void;
 };
 
-export default function WrapPieces({ moveBackStep, moveToNextStep }: Props) {
+const SetApprovals: React.FunctionComponent<Props> = ({
+  moveBackStep,
+  moveToNextStep,
+}) => {
   return (
     <div className="flex flex-col h-full items-start justify-between">
       <div>
-        <div className="text-2xl font-bold">3. Wrap Pieces</div>
-        Wrap Pieces
+        <div className="text-2xl font-bold">Set approvals</div>
+        Set Approvals
       </div>
       <div className="flex space-x-4 justify-self-end self-end">
         <Button onClick={moveBackStep} type="secondary">
@@ -20,4 +23,6 @@ export default function WrapPieces({ moveBackStep, moveToNextStep }: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default SetApprovals;
