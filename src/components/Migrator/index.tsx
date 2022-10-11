@@ -29,11 +29,31 @@ const MigratorSteps = ({ steps }: MigratorStepsProps) => {
   };
 
   return (
-    <div className="w-full h-full p-10">
-      {React.createElement<StepProps>(steps[step], {
-        moveBackStep,
-        moveToNextStep,
-      })}
+    <div className="w-full h-full p-10 flex">
+      <div className="w-16 flex flex-col justify-between">
+        {Array.from(Array(MAX_STEP).keys()).map((i) => {
+          const stepStyles =
+            i === step
+              ? 'bg-blue-500 text-white'
+              : i > step
+              ? 'bg-gray-300 text-black'
+              : 'bg-green-500 text-white';
+          return (
+            <div
+              key={i}
+              className={`flex justify-center items-center h-12 w-12 rounded-full ${stepStyles}`}
+            >
+              {i + 1}
+            </div>
+          );
+        })}
+      </div>
+      <div className="pl-12">
+        {React.createElement<StepProps>(steps[step], {
+          moveBackStep,
+          moveToNextStep,
+        })}
+      </div>
     </div>
   );
 };
