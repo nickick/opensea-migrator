@@ -9,6 +9,8 @@ import WrapPieces from './steps/WrapPieces';
 type StepProps = {
   moveBackStep: () => void;
   moveToNextStep: () => void;
+  stepOrder: number;
+  currentStep: number;
 };
 
 type MigratorStepsProps = {
@@ -29,31 +31,16 @@ const MigratorSteps = ({ steps }: MigratorStepsProps) => {
   };
 
   return (
-    <div className="w-full h-full p-10 flex">
-      <div className="w-16 flex flex-col grow-0 justify-between">
-        {Array.from(Array(MAX_STEP).keys()).map((i) => {
-          const stepStyles =
-            i === step
-              ? 'bg-currentStepColor text-white'
-              : i > step
-              ? 'bg-futureStepColor text-black'
-              : 'bg-previousStepColor text-white';
-          return (
-            <div
-              key={i}
-              className={`flex justify-center items-center h-12 w-12 rounded-full ${stepStyles}`}
-            >
-              {i + 1}
-            </div>
-          );
-        })}
-      </div>
-      <div className="pl-12 grow">
-        {React.createElement<StepProps>(steps[step], {
+    <div className="w-full h-full p-10 flex flex-col space-y-4">
+      {steps.map((stepComponent, i) => {
+        return React.createElement<StepProps>(stepComponent, {
           moveBackStep,
           moveToNextStep,
-        })}
-      </div>
+          stepOrder: i,
+          currentStep: step,
+          key: i,
+        });
+      })}
     </div>
   );
 };
@@ -72,7 +59,12 @@ export default function Migrator() {
   }, [accountLoaded]);
 
   return (
-    <div className="bg-gray-50/90 h-96 w-full">
+    <div
+      className="bg-gray-50/90 w-full"
+      style={{
+        height: '40rem',
+      }}
+    >
       {!isConnected || !accountLoaded ? (
         <div className="w-full h-full flex justify-center items-center">
           <Button onClick={() => connect()}>Connect Wallet</Button>
