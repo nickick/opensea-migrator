@@ -23,7 +23,11 @@ const SetApprovals: React.FunctionComponent<Props> = ({
   const isActive = stepOrder === currentStep;
 
   return (
-    <div className={`w-full justify-center ${isActive ? 'grow' : 'grow-0'}`}>
+    <div
+      className={`w-full justify-center ${
+        isActive ? 'grow' : 'grow-0'
+      }  flex flex-col`}
+    >
       <div className="flex items-center">
         <div className={`flex w-1/12 justify-center items-center`}>
           <div
@@ -42,19 +46,17 @@ const SetApprovals: React.FunctionComponent<Props> = ({
       </div>
       <div className="flex grow">
         <div className="w-1/12" />
-        <div className="flex flex-col items-start justify-between">
-          {stepOrder === currentStep && (
-            <div>
-              Set approvals
-              <div className="flex space-x-4 justify-self-end self-end">
-                <Button onClick={moveBackStep} type="secondary">
-                  Back
-                </Button>
-                <Button onClick={moveToNextStep}>Continue</Button>
-              </div>
+        {stepOrder === currentStep && (
+          <div className="flex flex-col items-start justify-between w-11/12 grow">
+            Set approvals
+            <div className="flex space-x-4 justify-self-end self-end">
+              <Button onClick={moveBackStep} type="secondary">
+                Back
+              </Button>
+              <Button onClick={moveToNextStep}>Continue</Button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
