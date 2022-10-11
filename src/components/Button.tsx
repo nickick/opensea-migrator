@@ -4,6 +4,7 @@ type Props = {
   children?: React.ReactNode;
   size?: 'small' | 'large';
   type?: 'primary' | 'secondary';
+  disabled?: boolean;
 };
 
 export default function Button({
@@ -12,14 +13,19 @@ export default function Button({
   children,
   size = 'large',
   type = 'primary',
+  disabled = false,
 }: Props) {
   return (
     <button
       className={`${size === 'small' ? 'text-sm' : 'text-xl'} ${
         type === 'primary'
-          ? 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white'
+          ? disabled
+            ? 'bg-gradient-to-r from-indigo-500/50 to-blue-500/50 text-white cursor-not-allowed'
+            : 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white'
           : 'border-black border'
-      } px-6 py-4 shadow-lg whitespace-nowrap`}
+      }
+        px-6 py-4 shadow-lg whitespace-nowrap`}
+      disabled={disabled}
       onClick={onClick}
     >
       {text}
