@@ -8,7 +8,8 @@ module.exports = {
       colors: {
         currentStepColor: config.styles.currentStepColor,
         previousStepColor: config.styles.previousStepColor,
-        futureStepColor: config.styles.futureStepColor
+        futureStepColor: config.styles.futureStepColor,
+        ctaButtonColor: config.styles.ctaButtonColor,
       }
     },
   },

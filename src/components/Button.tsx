@@ -24,8 +24,8 @@ export default function Button({
             : 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white'
           : type === 'action'
           ? disabled
-            ? 'bg-green-700 text-white opacity-50'
-            : 'bg-green-700 text-white'
+            ? 'bg-ctaButtonColor text-white opacity-50'
+            : 'bg-ctaButtonColor text-white'
           : 'border-black border'
       }
         px-6 py-4 shadow-lg whitespace-nowrap`}

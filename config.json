@@ -49,7 +49,8 @@
     "textHighlighStyle": "rgb(253 224 71 / 0.5)",
     "currentStepColor": "#FE9AEE",
     "previousStepColor": "#0050AA",
-    "futureStepColor": "#D1D5DB"
+    "futureStepColor": "#D1D5DB",
+    "ctaButtonColor": "#15803D"
   },
   "socials": {
     "discordUrl": "https://discord",
