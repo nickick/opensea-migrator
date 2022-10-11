@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from 'src/components/Button';
 import { StepText } from 'src/utils/types';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useAccount, useConnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import ChoosePieces from './steps/ChoosePieces';
 import RevokeApprovals from './steps/RevokeApprovals';
@@ -59,11 +59,10 @@ const MigratorSteps = ({ steps, stepText }: MigratorStepsProps) => {
 export default function Migrator({ stepText }: { stepText: StepText[] }) {
   const [accountLoaded, setIsAccountLoaded] = useState(false);
 
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
-  const { disconnect } = useDisconnect();
 
   useEffect(() => {
     setIsAccountLoaded(true);
