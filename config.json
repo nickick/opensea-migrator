@@ -12,7 +12,10 @@
   ],
   "styles": {
     "textColor": "#ffffff",
-    "textHighlighStyle": "rgb(253 224 71 / 0.5)"
+    "textHighlighStyle": "rgb(253 224 71 / 0.5)",
+    "currentStepColor": "#FE9AEE",
+    "previousStepColor": "#0050AA",
+    "futureStepColor": "#D1D5DB"
   },
   "socials": {
     "discordUrl": "https://discord",

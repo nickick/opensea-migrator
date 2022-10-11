@@ -6,7 +6,7 @@ type Props = {
 
 const ChoosePieces: React.FunctionComponent<Props> = ({ moveToNextStep }) => {
   return (
-    <div className="flex flex-col h-full items-start justify-between">
+    <div className="flex flex-col h-full grow items-start justify-between">
       <div>
         <div className="text-2xl font-bold">Choose piece(s)</div>
         Some pieces

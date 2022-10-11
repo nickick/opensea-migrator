@@ -30,14 +30,14 @@ const MigratorSteps = ({ steps }: MigratorStepsProps) => {
 
   return (
     <div className="w-full h-full p-10 flex">
-      <div className="w-16 flex flex-col justify-between">
+      <div className="w-16 flex flex-col grow-0 justify-between">
         {Array.from(Array(MAX_STEP).keys()).map((i) => {
           const stepStyles =
             i === step
-              ? 'bg-blue-500 text-white'
+              ? 'bg-currentStepColor text-white'
               : i > step
-              ? 'bg-gray-300 text-black'
-              : 'bg-green-500 text-white';
+              ? 'bg-futureStepColor text-black'
+              : 'bg-previousStepColor text-white';
           return (
             <div
               key={i}
@@ -48,7 +48,7 @@ const MigratorSteps = ({ steps }: MigratorStepsProps) => {
           );
         })}
       </div>
-      <div className="pl-12">
+      <div className="pl-12 grow">
         {React.createElement<StepProps>(steps[step], {
           moveBackStep,
           moveToNextStep,
