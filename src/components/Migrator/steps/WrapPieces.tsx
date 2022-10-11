@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import Button from 'src/components/Button';
+import { StepText } from 'src/utils/types';
 
 type Props = {
   moveToNextStep: () => void;
   moveBackStep: () => void;
+  text: StepText;
   stepOrder: number;
   currentStep: number;
 };
@@ -10,6 +13,7 @@ type Props = {
 const WrapPieces: React.FunctionComponent<Props> = ({
   moveToNextStep,
   moveBackStep,
+  text,
   stepOrder,
   currentStep,
 }) => {
@@ -21,6 +25,8 @@ const WrapPieces: React.FunctionComponent<Props> = ({
       : 'bg-previousStepColor opacity-50 text-white';
 
   const isActive = stepOrder === currentStep;
+
+  const [disabled, setDisabled] = useState(true);
 
   return (
     <div
@@ -41,19 +47,36 @@ const WrapPieces: React.FunctionComponent<Props> = ({
             stepOrder === currentStep ? 'text-black' : 'text-gray-400'
           }`}
         >
-          Wrap Pieces
+          {text.title}
         </div>
       </div>
       <div className="flex grow">
         <div className="w-1/12" />
         {stepOrder === currentStep && (
           <div className="flex flex-col items-start justify-between w-11/12 grow">
-            Wrap Pieces
+            {disabled ? (
+              <>
+                {text.description?.map((desc) => (
+                  <p key={desc.slice(0, 10)}>{desc}</p>
+                ))}
+                <Button
+                  onClick={() => setDisabled(false)}
+                  type="action"
+                  disabled={!disabled}
+                >
+                  {text.buttonText}
+                </Button>
+              </>
+            ) : (
+              <div>{text.buttonConfirmationText}</div>
+            )}
             <div className="flex space-x-4 justify-self-end self-end">
               <Button onClick={moveBackStep} type="secondary">
                 Back
               </Button>
-              <Button onClick={moveToNextStep}>Continue</Button>
+              <Button onClick={moveToNextStep} disabled={disabled}>
+                Continue
+              </Button>
             </div>
           </div>
         )}

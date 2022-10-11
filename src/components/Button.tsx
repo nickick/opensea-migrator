@@ -3,7 +3,7 @@ type Props = {
   text?: string;
   children?: React.ReactNode;
   size?: 'small' | 'large';
-  type?: 'primary' | 'secondary';
+  type?: 'primary' | 'secondary' | 'action';
   disabled?: boolean;
 };
 
@@ -22,6 +22,10 @@ export default function Button({
           ? disabled
             ? 'bg-gradient-to-r from-indigo-500/50 to-blue-500/50 text-white cursor-not-allowed'
             : 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white'
+          : type === 'action'
+          ? disabled
+            ? 'bg-green-700 text-white opacity-50'
+            : 'bg-green-700 text-white'
           : 'border-black border'
       }
         px-6 py-4 shadow-lg whitespace-nowrap`}

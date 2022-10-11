@@ -15,7 +15,7 @@ export default function Footer({
 }: FooterProps) {
   return (
     <footer>
-      <div className="flex justify-end max-w-screen-lg mx-auto">
+      <div className="flex justify-end max-w-screen-lg mx-auto pr-4">
         {discordUrl && (
           <a
             href={discordUrl}

@@ -10,6 +10,40 @@
     "We use a merkle tree to ensure that only valid Seerlight 1/1 NFTs are selectable for migration. The same merkle tree is also used to ensure the right token ID is assigned to the new token. You can find details about the exact construction of the merkle tree here, and you can use that information to verify for yourself the validity of the merkle root used in the smart contract.",
     "Finally, once pieces are successfully minted, Seerlight will send the old tokens to the burn address. You will be permanently recorded on chain in the new smart contract as the official migrator of the old token."
   ],
+  "text": {
+    "steps": [
+      {
+        "title": "Choose piece(s)"
+      },
+      {
+        "title": "Set approvals",
+        "description": [
+          "In order to wrap your existing OpenSea Shared Storefront NFT(s) and exchange for the new token, we need to get approval to manage those specific tokens on behalf of your wallet. This approval is only for the piece(s) you selected.",
+          "Click set approval below."
+        ],
+        "buttonText": "Set Approval",
+        "buttonConfirmationText": "Approval Set!"
+      },
+      {
+        "title": "Wrap piece(s)",
+        "description": [
+          "Now for the fun part! We’re going to wrap your existing OpenSea Shared Storefront NFT, where it’ll be kept inside this contract. Then you’ll be issued the same piece, but as an ERC721 on Seerlight’s own smart contract!",
+          "You can unwrap anytime to burn the ERC721 and get back the original piece."
+        ],
+        "buttonText": "Wrap and Mint",
+        "buttonConfirmationText": "Congrats! Your new piece has now been minted."
+      },
+      {
+        "title": "Revoke approvals",
+        "description": [
+          "And finally, for security purposes, let’s revoke the access you granted us to manage your OpenSea Shared Storefront token.",
+          "While this step isn’t absolutely necessary, it’s good hygiene to do so. Click below to initiate."
+        ],
+        "buttonText": "Revoke Approval",
+        "buttonConfirmationText": "Approval Revoked!"
+      }
+    ]
+  },
   "styles": {
     "textColor": "#ffffff",
     "textHighlighStyle": "rgb(253 224 71 / 0.5)",

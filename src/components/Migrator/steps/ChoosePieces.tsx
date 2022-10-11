@@ -1,7 +1,9 @@
 import Button from 'src/components/Button';
+import { StepText } from 'src/utils/types';
 
 type Props = {
   moveToNextStep: () => void;
+  text: StepText;
   stepOrder: number;
   currentStep: number;
 };
@@ -10,6 +12,7 @@ const ChoosePieces: React.FunctionComponent<Props> = ({
   moveToNextStep,
   stepOrder,
   currentStep,
+  text,
 }) => {
   const stepStyles =
     stepOrder === currentStep
@@ -39,7 +42,7 @@ const ChoosePieces: React.FunctionComponent<Props> = ({
             stepOrder === currentStep ? 'text-black' : 'text-gray-400'
           }`}
         >
-          Choose piece(s)
+          {text.title}
         </div>
       </div>
       <div className="flex grow">

@@ -1,17 +1,17 @@
-import { useState } from 'react';
 import Button from 'src/components/Button';
+import { useState } from 'react';
 import { StepText } from 'src/utils/types';
 
 type Props = {
-  moveToNextStep: () => void;
+  moveToBeginning: () => void;
   moveBackStep: () => void;
   text: StepText;
   stepOrder: number;
   currentStep: number;
 };
 
-const SetApprovals: React.FunctionComponent<Props> = ({
-  moveToNextStep,
+const WrapPieces: React.FunctionComponent<Props> = ({
+  moveToBeginning,
   moveBackStep,
   text,
   stepOrder,
@@ -47,7 +47,7 @@ const SetApprovals: React.FunctionComponent<Props> = ({
             stepOrder === currentStep ? 'text-black' : 'text-gray-400'
           }`}
         >
-          {text.title}
+          Revoke Approvals
         </div>
       </div>
       <div className="flex grow">
@@ -68,8 +68,8 @@ const SetApprovals: React.FunctionComponent<Props> = ({
               <Button onClick={moveBackStep} type="secondary">
                 Back
               </Button>
-              <Button onClick={moveToNextStep} disabled={disabled}>
-                Continue
+              <Button onClick={moveToBeginning} disabled={disabled}>
+                Start Over
               </Button>
             </div>
           </div>
@@ -79,4 +79,4 @@ const SetApprovals: React.FunctionComponent<Props> = ({
   );
 };
 
-export default SetApprovals;
+export default WrapPieces;

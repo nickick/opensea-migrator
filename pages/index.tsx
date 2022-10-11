@@ -4,15 +4,15 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import path from 'path';
 import { useState } from 'react';
-import Button from 'src/components/Button';
 import ConnectButton from 'src/components/ConnectButton';
 import ExplanationModal from 'src/components/ExplanationModal';
 import Footer from 'src/components/Footer';
 import InfoIcon from 'src/components/InfoIcon';
 import Migrator from 'src/components/Migrator';
-import { createClient, useAccount, useDisconnect, WagmiConfig } from 'wagmi';
+import { createClient, WagmiConfig } from 'wagmi';
+import { StepText } from 'src/utils/types';
 
-type Props = {
+type ConfigProps = {
   name: string;
   title: string;
   description: string;
@@ -22,6 +22,9 @@ type Props = {
   styles: {
     textColor?: string;
     textHighlighStyle?: string;
+  };
+  text: {
+    steps: StepText[];
   };
   socials: {
     discordUrl?: string;
@@ -35,7 +38,7 @@ const client = createClient({
   provider: getDefaultProvider(),
 });
 
-const Home: NextPage<Props> = (props: Props) => {
+const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -102,7 +105,7 @@ const Home: NextPage<Props> = (props: Props) => {
               />
             </p>
 
-            <Migrator />
+            <Migrator stepText={props.text.steps} />
           </div>
         </main>
       </WagmiConfig>
@@ -114,7 +117,7 @@ const Home: NextPage<Props> = (props: Props) => {
 
 export default Home;
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const filePath = path.join(process.cwd(), 'config.json');
   const jsonData = await fsPromises.readFile(filePath);
   const stringData = jsonData.toString();
