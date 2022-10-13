@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Button from 'src/components/Button';
 import { StepText } from 'src/utils/types';
+import { StepBody, StepHeader, StepWrapper } from '.';
 
 type Props = {
   moveToNextStep: () => void;
@@ -29,59 +30,39 @@ const WrapPieces: React.FunctionComponent<Props> = ({
   const [disabled, setDisabled] = useState(true);
 
   return (
-    <div
-      className={`w-full justify-center ${
-        isActive ? 'grow' : 'grow-0'
-      }  flex flex-col`}
-    >
-      <div className="flex items-center">
-        <div className={`flex w-1/12 justify-center items-center`}>
-          <div
-            className={`h-12 w-12 text-center rounded-full flex items-center justify-center ${stepStyles}`}
-          >
-            {stepOrder + 1}
-          </div>
-        </div>
-        <div
-          className={`text-2xl font-bold w-11/12 ${
-            stepOrder === currentStep ? 'text-black' : 'text-gray-400'
-          }`}
-        >
-          {text.title}
-        </div>
-      </div>
-      <div className="flex grow">
-        <div className="w-1/12" />
-        {stepOrder === currentStep && (
-          <div className="flex flex-col items-start justify-between w-11/12 grow">
-            {disabled ? (
-              <>
-                {text.description?.map((desc) => (
-                  <p key={desc.slice(0, 10)}>{desc}</p>
-                ))}
-                <Button
-                  onClick={() => setDisabled(false)}
-                  type="action"
-                  disabled={!disabled}
-                >
-                  {text.buttonText}
-                </Button>
-              </>
-            ) : (
-              <div>{text.buttonConfirmationText}</div>
-            )}
-            <div className="flex space-x-4 justify-self-end self-end">
-              <Button onClick={moveBackStep} type="secondary">
-                Back
+    <StepWrapper isActive={isActive}>
+      <StepHeader stepOrder={stepOrder} currentStep={currentStep}>
+        {text.title}
+      </StepHeader>
+      <StepBody isActive={isActive}>
+        <>
+          {disabled ? (
+            <>
+              {text.description?.map((desc) => (
+                <p key={desc.slice(0, 10)}>{desc}</p>
+              ))}
+              <Button
+                onClick={() => setDisabled(false)}
+                type="action"
+                disabled={!disabled}
+              >
+                {text.buttonText}
               </Button>
-              <Button onClick={moveToNextStep} disabled={disabled}>
-                Continue
-              </Button>
-            </div>
+            </>
+          ) : (
+            <div>{text.buttonConfirmationText}</div>
+          )}
+          <div className="flex space-x-4 justify-self-end self-end">
+            <Button onClick={moveBackStep} type="secondary">
+              Back
+            </Button>
+            <Button onClick={moveToNextStep} disabled={disabled}>
+              Continue
+            </Button>
           </div>
-        )}
-      </div>
-    </div>
+        </>
+      </StepBody>
+    </StepWrapper>
   );
 };
 

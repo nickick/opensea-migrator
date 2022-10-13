@@ -7,6 +7,9 @@ const nextConfig = {
       'pages',
       'src'
     ]
+  },
+  images: {
+    domains: ['i.seadn.io']
   }
 };
 
