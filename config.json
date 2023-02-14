@@ -1,7 +1,6 @@
 {
   "name": "Seerlight: Migration",
   "title": "Seerlight: Migration",
-  "backgroundImage": "https://d1fdloi71mui9q.cloudfront.net/axMZ5UcRLeqmHqpXZ77g_yVVJ19Jodsguk0F3",
   "description": "Using the magic of smart contracts, Seerlight is moving his 1/1s on the OpenSea shared storefront contract to his own custom Manifold contract. This dapp enables Seerlight 1/1 collectors to wrap their existing tokens and migrate their pieces over to the new smart contract.",
   "learnText": "Learn about the migration process here: ",
   "migrationProcessDescription": [
@@ -46,11 +45,12 @@
   },
   "styles": {
     "textColor": "#ffffff",
-    "textHighlighStyle": "rgb(253 224 71 / 0.5)",
+    "textHighlighStyle": "",
     "currentStepColor": "#FE9AEE",
     "previousStepColor": "#0050AA",
     "futureStepColor": "#D1D5DB",
-    "ctaButtonColor": "#15803D"
+    "ctaButtonColor": "#15803D",
+    "background": "linear-gradient(180deg, #006CC9 0%, #1C8ED4 25%, #9793C5 51.04%, #FE95A9 75.52%, #FB8C88 100%)"
   },
   "socials": {
     "discordUrl": "https://discord",

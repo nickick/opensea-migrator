@@ -1,5 +1,5 @@
+import ConnectButton from '../ConnectButton';
 import React, { useEffect, useState } from 'react';
-import Button from 'src/components/Button';
 import { StepText } from 'src/utils/types';
 import { useAccount, useConnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
@@ -60,9 +60,6 @@ export default function Migrator({ stepText }: { stepText: StepText[] }) {
   const [accountLoaded, setIsAccountLoaded] = useState(false);
 
   const { isConnected } = useAccount();
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
 
   useEffect(() => {
     setIsAccountLoaded(true);
@@ -70,15 +67,23 @@ export default function Migrator({ stepText }: { stepText: StepText[] }) {
 
   return (
     <div
-      className="bg-gray-50/90 w-full"
+      className="w-full relative backdrop-blur-xl flex items-center justify-center"
       style={{
         height: '40rem',
       }}
     >
+      <div
+        className="w-full h-full absolute z-0 border border-[#34B9E5]"
+        style={{
+          background: 'rgba(255, 255, 255, 0.1)',
+          mixBlendMode: 'overlay',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '8px',
+        }}
+      />
+      <div />
       {!isConnected || !accountLoaded ? (
-        <div className="w-full h-full flex justify-center items-center">
-          <Button onClick={() => connect()}>Connect Wallet</Button>
-        </div>
+        <ConnectButton background="bg-[#665EF1]" border="" />
       ) : (
         <MigratorSteps
           steps={[ChoosePieces, SetApprovals, WrapPieces, RevokeApprovals]}

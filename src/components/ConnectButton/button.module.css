@@ -1,0 +1,78 @@
+/**
+Based on Kevin Powell's tutorial: https://www.youtube.com/watch?v=fcnDBP3k3BE
+**/
+
+.connectButton {
+}
+
+.glowEffect {
+  position: relative;
+  /* Do not change, used for calculations */
+  --container-offset: 25px;
+  --glow-line-color: #fff;
+  --glow-line-thickness: 1px;
+  --glow-line-length: 10px;
+  --glow-blur-color: #fff;
+  --glow-blur-size: 10px;
+  --glow-offset: 0px;
+  --animation-length: 1000ms;
+}
+
+.glowContainer {
+  /* outline: 3px solid blue; */
+  position: absolute;
+  pointer-events: none;
+  width: calc(100% + var(--container-offset));
+  height: calc(100% + var(--container-offset));
+  inset: calc(var(--container-offset) / -2);
+  border-radius: 4px;
+  opacity: 0;
+}
+
+.glowEffect:is(:hover, :focus) .glowContainer {
+  animation: glow-visibility ease-in-out var(--animation-length);
+}
+
+.glowEffect:is(:hover, :focus) :is(.glowLine, .glowBlur) {
+  stroke-dashoffset: -80px;
+  transition: stroke-dashoffset var(--animation-length) ease-in;
+}
+
+.glowBlur,
+.glowLine {
+  width: calc(100% - var(--container-offset) + var(--glow-offset));
+  height: calc(100% - var(--container-offset) + var(--glow-offset));
+  fill: transparent;
+  stroke-width: 5px;
+  stroke: black;
+  stroke-dasharray: var(--glow-line-length) calc(50px - var(--glow-line-length));
+  rx: 6px;
+  x: calc(calc(var(--container-offset) - var(--glow-offset)) / 2);
+  y: calc(calc(var(--container-offset) - var(--glow-offset)) / 2);
+}
+
+.glowBlur {
+  filter: blur(var(--glow-blur-size));
+  stroke: var(--glow-blur-color);
+  stroke-width: var(--glow-blur-size);
+}
+
+.glowLine {
+  stroke: var(--glow-line-color);
+  stroke-width: var(--glow-line-thickness);
+}
+
+@keyframes glow-visibility {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  25%,
+  75% {
+    opacity: 1;
+  }
+}
+
+.glowEffect[data-attribute-offset='10px'] {
+  --glow-offset: 10px;
+}
