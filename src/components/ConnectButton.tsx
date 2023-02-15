@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Button from './Button';
 import ShinyButton from './ShinyButton';
 
 export default function Connect({
@@ -29,8 +30,6 @@ export default function Connect({
           chain &&
           (!authenticationStatus || authenticationStatus === 'authenticated');
 
-        const buttonClasses = `rounded backdrop-blur-2 text-white backdrop-blur-xl whitespace-nowrap py-2 px-8 ${border} ${background}`;
-
         return (
           <div
             {...(!ready && {
@@ -49,7 +48,6 @@ export default function Connect({
                     onClick={openConnectModal}
                     background={background}
                     border={border}
-                    className={buttonClasses}
                   >
                     Connect Wallet
                   </ShinyButton>
@@ -57,24 +55,14 @@ export default function Connect({
               }
 
               if (chain.unsupported) {
-                return (
-                  <button
-                    onClick={openChainModal}
-                    type="button"
-                    className={buttonClasses}
-                  >
-                    Wrong network
-                  </button>
-                );
+                return <Button onClick={openChainModal}>Wrong network</Button>;
               }
 
               return (
                 <div style={{ display: 'flex', gap: 12 }}>
-                  <button
+                  <Button
                     onClick={openChainModal}
-                    className={buttonClasses}
                     style={{ display: 'flex', alignItems: 'center' }}
-                    type="button"
                   >
                     {chain.hasIcon && (
                       <div
@@ -97,18 +85,14 @@ export default function Connect({
                       </div>
                     )}
                     {chain.name}
-                  </button>
+                  </Button>
 
-                  <button
-                    onClick={openAccountModal}
-                    type="button"
-                    className={buttonClasses}
-                  >
+                  <Button onClick={openAccountModal}>
                     {account.displayName}
                     {account.displayBalance
                       ? ` (${account.displayBalance})`
                       : ''}
-                  </button>
+                  </Button>
                 </div>
               );
             })()}

@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react';
 import shinyStyle from './shiny.module.css';
-import { twMerge } from 'tailwind-merge';
+import Button from '../Button';
 
 type ShinyButtonProps = {
   background?: string;
@@ -12,24 +12,19 @@ type ShinyButtonProps = {
 };
 
 const ShinyButton = ({
-  background = 'bg-white bg-opacity-10',
-  border = 'border border-[#34B9E5]',
+  background,
+  border,
   children,
   className,
   onClick,
   style,
 }: ShinyButtonProps) => {
-  const classNames = twMerge(
-    background,
-    border,
-    className,
-    'rounded backdrop-blur-2 text-white backdrop-blur-xl whitespace-nowrap py-2 px-8'
-  );
   return (
-    <button
-      type="button"
+    <Button
       onClick={onClick}
-      className={`${classNames} ${shinyStyle.connectButton} ${shinyStyle.glowEffect}`}
+      background={background}
+      border={border}
+      className={`${className} ${shinyStyle.connectButton} ${shinyStyle.glowEffect}`}
       style={style}
     >
       {children}
@@ -45,7 +40,7 @@ const ShinyButton = ({
           className={`${shinyStyle.glowLine}`}
         ></rect>
       </svg>
-    </button>
+    </Button>
   );
 };
 

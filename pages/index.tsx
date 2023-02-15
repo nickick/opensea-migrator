@@ -94,6 +94,7 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
               className="absolute z-10 left-0 bottom-0"
               height={605}
               width={484}
+              priority
             />
             <div className="flex items-center relative z-10">
               <h1

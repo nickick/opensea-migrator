@@ -2,20 +2,18 @@
 Based on Kevin Powell's tutorial: https://www.youtube.com/watch?v=fcnDBP3k3BE
 **/
 
-.connectButton {
-}
-
 .glowEffect {
   position: relative;
   /* Do not change, used for calculations */
   --container-offset: 25px;
   --glow-line-color: #fff;
   --glow-line-thickness: 1px;
-  --glow-line-length: 10px;
+  --glow-line-length: 5px;
   --glow-blur-color: #fff;
-  --glow-blur-size: 10px;
+  --glow-blur-size: 5px;
   --glow-offset: 0px;
-  --animation-length: 1000ms;
+  --glow-stroke-offset: -50px;
+  --animation-length: 400ms;
 }
 
 .glowContainer {
@@ -30,11 +28,11 @@ Based on Kevin Powell's tutorial: https://www.youtube.com/watch?v=fcnDBP3k3BE
 }
 
 .glowEffect:is(:hover, :focus) .glowContainer {
-  animation: glow-visibility ease-in-out var(--animation-length);
+  animation: glow-visibility ease-out var(--animation-length);
 }
 
 .glowEffect:is(:hover, :focus) :is(.glowLine, .glowBlur) {
-  stroke-dashoffset: -80px;
+  stroke-dashoffset: var(--glow-stroke-offset);
   transition: stroke-dashoffset var(--animation-length) ease-in;
 }
 
