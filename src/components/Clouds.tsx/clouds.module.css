@@ -1,0 +1,17 @@
+.clouds {
+  transform: translate(0, 0);
+  animation: swing 4000ms ease-in-out 200ms infinite;
+}
+
+@keyframes swing {
+  0%,
+  75%,
+  100% {
+    transform: translate(10px, 0px);
+  }
+
+  25%,
+  50% {
+    transform: translate(-5px, 0px);
+  }
+}

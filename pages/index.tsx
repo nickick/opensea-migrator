@@ -2,15 +2,17 @@
 import fsPromises from 'fs/promises';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Image from 'next/future/image';
 import path from 'path';
 import { useState } from 'react';
 import Client from 'src/components/Client';
 import ConnectButton from 'src/components/ConnectButton';
 import ExplanationModal from 'src/components/ExplanationModal';
-import Footer from 'src/components/Footer';
 import InfoIcon from 'src/components/InfoIcon';
 import Migrator from 'src/components/Migrator';
 import { StepText } from 'src/utils/types';
+import Moon from 'src/components/Moon';
+import Clouds from 'src/components/Clouds.tsx';
 
 type ConfigProps = {
   name: string;
@@ -71,23 +73,27 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
       <Client>
         <main className="z-10 relative">
           <div
-            className="max-w-screen-2xl mx-auto space-y-8 border border-[#34B9E5] px-40 pb-12 pt-12 rounded-xl relative"
+            className="w-full h-full absolute inset-0 z-0"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(0, 108, 201, 0.6) 0%, rgba(28, 142, 212, 0.6) 25%, rgba(151, 147, 197, 0.6) 51.04%, rgba(254, 149, 169, 0.6) 75.52%, rgba(251, 140, 136, 0.6) 100%)',
+              mixBlendMode: 'color-dodge',
+            }}
+          />
+          <div
+            className="max-w-screen-2xl mx-auto space-y-8 border border-[#34B9E5] px-40 pb-12 pt-12 rounded-xl relative overflow-hidden"
             style={{
               boxShadow: '120px 120px 200px rgba(0, 0, 0, 0.3)',
             }}
           >
-            <div
-              className="w-full h-full absolute inset-0 z-0"
-              style={{
-                background:
-                  'linear-gradient(180deg, rgba(0, 108, 201, 0.6) 0%, rgba(28, 142, 212, 0.6) 25%, rgba(151, 147, 197, 0.6) 51.04%, rgba(254, 149, 169, 0.6) 75.52%, rgba(251, 140, 136, 0.6) 100%)',
-                mixBlendMode: 'darken',
-              }}
-            />
-            <img
+            <Moon className="absolute z-10 right-10 top-10" />
+            <Clouds className="absolute z-10 right-20 top-48" />
+            <Image
               src="/castle.png"
               alt="Seerlight Japanese castle"
               className="absolute z-10 left-0 bottom-0"
+              height={605}
+              width={484}
             />
             <div className="flex items-center relative z-10">
               <h1
