@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import style from './button.module.css';
+import ShinyButton from './ShinyButton';
 
 export default function Connect({
   background = 'bg-white bg-opacity-10',
@@ -29,7 +29,7 @@ export default function Connect({
           chain &&
           (!authenticationStatus || authenticationStatus === 'authenticated');
 
-        const buttonClasses = `rounded backdrop-blur-2 text-white backdrop-blur-xl whitespace-nowrap py-2 px-8 ${border} ${background} ${style.connectButton} ${style.glowEffect}`;
+        const buttonClasses = `rounded backdrop-blur-2 text-white backdrop-blur-xl whitespace-nowrap py-2 px-8 ${border} ${background}`;
 
         return (
           <div
@@ -45,25 +45,14 @@ export default function Connect({
             {(() => {
               if (!connected) {
                 return (
-                  <button
+                  <ShinyButton
                     onClick={openConnectModal}
-                    type="button"
+                    background={background}
+                    border={border}
                     className={buttonClasses}
                   >
                     Connect Wallet
-                    <svg className={`${style.glowContainer}`}>
-                      <rect
-                        pathLength="100"
-                        strokeLinecap="round"
-                        className={`${style.glowBlur}`}
-                      ></rect>
-                      <rect
-                        pathLength="100"
-                        strokeLinecap="round"
-                        className={`${style.glowLine}`}
-                      ></rect>
-                    </svg>
-                  </button>
+                  </ShinyButton>
                 );
               }
 
