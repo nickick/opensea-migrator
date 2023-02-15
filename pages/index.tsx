@@ -61,7 +61,7 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
           backgroundBlendMode: 'hard-light',
         }}
       />
-      <div className="bg-black opacity-30 h-screen w-screen absolute z-[2] top-0 left-0 mix-blend-overlay" />
+      <div className="bg-black opacity-50 h-screen w-screen absolute z-[2] top-0 left-0 mix-blend-overlay" />
       <Head>
         <title>{props.name}</title>
         <meta name="description" content="Migration dapp for Seerlight NFTs" />
@@ -71,8 +71,10 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
       <Client>
         <main className="z-10 relative">
           <div
-            className="max-w-screen-xl mx-auto py-10 space-y-8 border border-[#34B9E5] p-20 rounded-xl relative"
-            style={{}}
+            className="max-w-screen-2xl mx-auto space-y-8 border border-[#34B9E5] px-40 pb-12 pt-12 rounded-xl relative"
+            style={{
+              boxShadow: '120px 120px 200px rgba(0, 0, 0, 0.3)',
+            }}
           >
             <div
               className="w-full h-full absolute inset-0 z-0"
