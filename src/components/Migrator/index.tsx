@@ -88,7 +88,9 @@ export default function Migrator({ stepText }: { stepText: StepText[] }) {
       /> */}
       <div />
       {!isConnected || !accountLoaded ? (
-        <ConnectButton background="bg-[#665EF1]" border="" />
+        <div className="w-full h-full flex justify-center items-center">
+          <ConnectButton background="bg-[#665EF1]" border="" />
+        </div>
       ) : (
         <MigratorSteps
           steps={[ChoosePieces, SetApprovals, WrapPieces, RevokeApprovals]}
