@@ -13,7 +13,7 @@ const StepIndicator = ({
       {stepText.map((step, stepNumber) => (
         <div
           key={step.title}
-          className={`flex text-primaryColor ml-16 items-center ${
+          className={`flex text-primaryColor ml-16 items-center transition-opacity duration-500 ${
             index === stepNumber ? 'opacity-100' : 'opacity-30'
           }`}
         >

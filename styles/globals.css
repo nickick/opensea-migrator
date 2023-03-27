@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
-.scrollbar-hide::-webkit-scrollbar {
+.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
   display: none;
 }
 
 /* For IE, Edge and Firefox */
-.scrollbar-hide {
+.react-horizontal-scrolling-menu--scroll-container {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }

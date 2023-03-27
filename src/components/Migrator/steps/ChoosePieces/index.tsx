@@ -1,10 +1,12 @@
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import Button from 'src/components/Button';
 import ShinyButton from 'src/components/ShinyButton';
 import { StepText } from 'src/utils/types';
 import { useAccount } from 'wagmi';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
+import PiecesGallery from './Gallery';
 
 type Props = {
   moveToNextStep: () => void;
@@ -62,42 +64,11 @@ const ChoosePieces: React.FunctionComponent<Props> = ({
         currentStep={currentStep}
       />
       <StepBody isActive={isActive}>
-        <div className="flex flex-nowrap gap-4 w-full overflow-x-auto overflow-y-hidden scrollbar-hide grow">
-          {nfts.map((nft) => {
-            const selected = selectedNfts.has(nft.token_id);
-            return (
-              <div
-                key={nft.image_url}
-                className={`w-64 h-96 shrink-0 border-4 flex flex-col p-2 cursor-pointer rounded-lg bg-primaryColor transition-all duration-500 ${
-                  selected
-                    ? 'opacity-100 border-currentStepColor bg-opacity-50'
-                    : 'opacity-50 bg-opacity-30'
-                }`}
-                onClick={setSelected(nft.token_id)}
-              >
-                <div className="w-full h-96 relative mb-2">
-                  <Image src={nft.image_url} alt={nft.name} layout="fill" />
-                </div>
-                <div className="flex space-x-2 items-center">
-                  <input
-                    type="checkbox"
-                    id={`select-${nft.token_id}`}
-                    checked={selectedNfts.has(nft.token_id)}
-                    className="bg-primaryColor border-currentStepColor text-currentStepColor focus:bg-currentStepColor w-6 h-6"
-                  />
-                  <p
-                    className={`text-xl ${
-                      selected ? 'text-currentStepColor' : 'text-primaryColor'
-                    }`}
-                  >
-                    {nft.name}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="flex space-x-4 self-end my-6 mr-10">
+        <PiecesGallery
+          setSelectedNfts={setSelectedNfts}
+          selectedNfts={selectedNfts}
+        />
+        <div className="flex space-x-4 self-end absolute bottom-6 right-8">
           <ShinyButton
             onClick={moveToNextStep}
             disabled={selectedNfts.size === 0}
@@ -111,6 +82,24 @@ const ChoosePieces: React.FunctionComponent<Props> = ({
     </StepWrapper>
   );
 };
+
+function LeftArrow() {
+  const { isFirstItemVisible, scrollPrev } = useContext(VisibilityContext);
+  return (
+    <button disabled={isFirstItemVisible} onClick={() => scrollPrev()}>
+      {`<`}
+    </button>
+  );
+}
+
+function RightArrow() {
+  const { isLastItemVisible, scrollNext } = useContext(VisibilityContext);
+  return (
+    <button disabled={isLastItemVisible} onClick={() => scrollNext()}>
+      {`>`}
+    </button>
+  );
+}
 
 export default ChoosePieces;
 

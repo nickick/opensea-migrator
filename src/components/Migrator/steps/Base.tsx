@@ -20,7 +20,9 @@ export const StepWrapper = ({
   }
 
   return (
-    <div className={`w-full h-full flex flex-col justify-center pt-16`}>
+    <div
+      className={`w-full h-full flex flex-col justify-center pt-16 relative`}
+    >
       {children}
     </div>
   );
