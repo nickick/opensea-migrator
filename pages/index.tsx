@@ -64,7 +64,11 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
           backgroundBlendMode: 'hard-light',
         }}
       />
+      {/* end grid */}
+
+      {/* darkening scrim for overall page */}
       <div className="bg-black opacity-20 h-screen w-screen absolute z-[2] top-0 left-0 mix-blend-overlay" />
+
       <Head>
         <title>{props.name}</title>
         <meta name="description" content="Migration dapp for Seerlight NFTs" />
@@ -73,12 +77,13 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
 
       <Client>
         <main className="z-10 relative">
+          {/* scrim for main window, with castle */}
+
           <div
-            className="w-full h-full absolute inset-0 z-0 rounded-xl"
+            className="w-full h-full absolute inset-0 z-0 rounded-xl mix-blend-multiply"
             style={{
               background:
                 'linear-gradient(180deg, rgba(0, 108, 201, 0.6) 0%, rgba(28, 142, 212, 0.6) 25%, rgba(151, 147, 197, 0.6) 51.04%, rgba(254, 149, 169, 0.6) 75.52%, rgba(251, 140, 136, 0.6) 100%)',
-              mixBlendMode: 'color-dodge',
             }}
           />
           <div
