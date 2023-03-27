@@ -11,6 +11,7 @@ module.exports = {
         previousStepColor: config.styles.previousStepColor,
         futureStepColor: config.styles.futureStepColor,
         ctaButtonColor: config.styles.ctaButtonColor,
+        borderColor: config.styles.borderColor,
       },
     },
   },

@@ -5,7 +5,7 @@ import ShinyButton from './ShinyButton';
 
 export default function Connect({
   background = 'bg-white bg-opacity-10',
-  border = 'border border-[#34B9E5]',
+  border = 'border border-borderColor',
 }: {
   background?: string;
   border?: string;

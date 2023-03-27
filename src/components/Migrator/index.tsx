@@ -72,20 +72,12 @@ export default function Migrator({ stepText }: { stepText: StepText[] }) {
 
   return (
     <div
-      className="w-full relative backdrop-blur-xl flex justify-start"
+      className="w-full relative backdrop-blur-xl flex justify-start rounded-xl"
       style={{
         height: '40rem',
       }}
     >
-      {/* <div
-        className="w-full h-full absolute z-0 border border-[#34B9E5]"
-        style={{
-          background: 'rgba(255, 255, 255, 0.1)',
-          mixBlendMode: 'overlay',
-          backdropFilter: 'blur(10px)',
-          borderRadius: '8px',
-        }}
-      /> */}
+      <div className="w-full h-full absolute z-0 border border-borderColor rounded-xl" />
       <div />
       {!isConnected || !accountLoaded ? (
         <div className="w-full h-full flex justify-center items-center">

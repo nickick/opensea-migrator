@@ -51,7 +51,8 @@
     "previousStepColor": "#0050AA",
     "futureStepColor": "#D1D5DB",
     "ctaButtonColor": "#15803D",
-    "background": "linear-gradient(180deg, #006CC9 0%, #1C8ED4 25%, #9793C5 51.04%, #FE95A9 75.52%, #FB8C88 100%)"
+    "background": "linear-gradient(180deg, #006CC9 0%, #1C8ED4 25%, #9793C5 51.04%, #FE95A9 75.52%, #FB8C88 100%)",
+    "borderColor": "#34B9E5"
   },
   "socials": {
     "discordUrl": "https://discord",

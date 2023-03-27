@@ -45,11 +45,12 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
         background: props.styles.background,
       }}
     >
+      {/* Grid using CSS */}
       <div
         className="w-full h-screen absolute z-0"
         style={{
           background: `repeating-linear-gradient(
-            0deg, rgba(255,255,255,0), rgba(255,255,255,0) 68px, #34B9E5 70px, rgba(255,255,255, 0.4) 5px
+            0deg, rgba(255,255,255,0), rgba(255,255,255,0) 68px, rgba(255, 255, 255, 0.3) 70px, rgba(255,255,255, 0.4) 5px
         )`,
           backgroundBlendMode: 'hard-light',
         }}
@@ -58,12 +59,12 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
         className="w-full h-screen absolute z-0"
         style={{
           background: `repeating-linear-gradient(
-            90deg, rgba(255,255,255,0), rgba(255,255,255,0) 68px, #34B9E5 70px, rgba(255,255,255, 0) 5px
+            90deg, rgba(255,255,255,0), rgba(255,255,255,0) 68px, rgba(255, 255, 255, 0.3) 70px, rgba(255,255,255, 0) 5px
         )`,
           backgroundBlendMode: 'hard-light',
         }}
       />
-      <div className="bg-black opacity-50 h-screen w-screen absolute z-[2] top-0 left-0 mix-blend-overlay" />
+      <div className="bg-black opacity-20 h-screen w-screen absolute z-[2] top-0 left-0 mix-blend-overlay" />
       <Head>
         <title>{props.name}</title>
         <meta name="description" content="Migration dapp for Seerlight NFTs" />
@@ -73,7 +74,7 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
       <Client>
         <main className="z-10 relative">
           <div
-            className="w-full h-full absolute inset-0 z-0"
+            className="w-full h-full absolute inset-0 z-0 rounded-xl"
             style={{
               background:
                 'linear-gradient(180deg, rgba(0, 108, 201, 0.6) 0%, rgba(28, 142, 212, 0.6) 25%, rgba(151, 147, 197, 0.6) 51.04%, rgba(254, 149, 169, 0.6) 75.52%, rgba(251, 140, 136, 0.6) 100%)',
@@ -81,7 +82,7 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
             }}
           />
           <div
-            className="max-w-screen-2xl mx-auto space-y-8 border border-[#34B9E5] px-40 pb-12 pt-12 rounded-xl relative overflow-hidden"
+            className="max-w-screen-2xl mx-auto space-y-8 border border-borderColor px-40 pb-12 pt-12 rounded-xl relative overflow-hidden"
             style={{
               boxShadow: '120px 120px 200px rgba(0, 0, 0, 0.3)',
             }}

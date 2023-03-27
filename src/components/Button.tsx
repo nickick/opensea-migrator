@@ -13,7 +13,7 @@ type ButtonProps = {
 
 const Button = ({
   background = 'bg-white bg-opacity-10',
-  border = 'border border-[#34B9E5]',
+  border = 'border border-borderColor',
   children,
   className,
   disabled,
