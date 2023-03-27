@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from 'src/components/Button';
 import { StepText } from 'src/utils/types';
-import { StepBody, StepHeader, StepWrapper } from '.';
+import { StepBody, StepHeader, StepWrapper } from './Base';
 
 type Props = {
   moveToNextStep: () => void;

@@ -1,8 +1,8 @@
-import ConnectButton from '../ConnectButton';
 import React, { useEffect, useState } from 'react';
 import { StepText } from 'src/utils/types';
-import { useAccount, useConnect } from 'wagmi';
-import { InjectedConnector } from 'wagmi/connectors/injected';
+import { useAccount } from 'wagmi';
+import ConnectButton from '../ConnectButton';
+import StepIndicator from './StepIndicator';
 import ChoosePieces from './steps/ChoosePieces';
 import RevokeApprovals from './steps/RevokeApprovals';
 import SetApprovals from './steps/SetApprovals';
@@ -40,18 +40,23 @@ const MigratorSteps = ({ steps, stepText }: MigratorStepsProps) => {
   };
 
   return (
-    <div className="w-full h-full p-10 flex flex-col space-y-4">
-      {steps.map((stepComponent, i) => {
-        return React.createElement<StepProps>(stepComponent, {
-          moveBackStep,
-          moveToNextStep,
-          moveToBeginning,
-          stepOrder: i,
-          currentStep: step,
-          text: stepText[i],
-          key: i,
-        });
-      })}
+    <div className="w-full flex">
+      <div className="w-1/4 flex justify-center">
+        <StepIndicator index={step} stepText={stepText} />
+      </div>
+      <div className="w-3/4 h-full flex flex-col space-y-4">
+        {steps.map((stepComponent, i) => {
+          return React.createElement<StepProps>(stepComponent, {
+            moveBackStep,
+            moveToNextStep,
+            moveToBeginning,
+            stepOrder: i,
+            currentStep: step,
+            text: stepText[i],
+            key: i,
+          });
+        })}
+      </div>
     </div>
   );
 };
@@ -67,12 +72,12 @@ export default function Migrator({ stepText }: { stepText: StepText[] }) {
 
   return (
     <div
-      className="w-full relative backdrop-blur-xl flex items-center justify-center"
+      className="w-full relative backdrop-blur-xl flex justify-start"
       style={{
         height: '40rem',
       }}
     >
-      <div
+      {/* <div
         className="w-full h-full absolute z-0 border border-[#34B9E5]"
         style={{
           background: 'rgba(255, 255, 255, 0.1)',
@@ -80,7 +85,7 @@ export default function Migrator({ stepText }: { stepText: StepText[] }) {
           backdropFilter: 'blur(10px)',
           borderRadius: '8px',
         }}
-      />
+      /> */}
       <div />
       {!isConnected || !accountLoaded ? (
         <ConnectButton background="bg-[#665EF1]" border="" />

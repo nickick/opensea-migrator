@@ -7,6 +7,7 @@ type ShinyButtonProps = {
   border?: string;
   children: React.ReactNode;
   className?: string;
+  disabled?: boolean;
   onClick: () => void;
   style?: CSSProperties;
 };
@@ -18,6 +19,7 @@ const ShinyButton = ({
   className,
   onClick,
   style,
+  ...props
 }: ShinyButtonProps) => {
   return (
     <Button
@@ -26,6 +28,7 @@ const ShinyButton = ({
       border={border}
       className={`${className} ${shinyStyle.connectButton} ${shinyStyle.glowEffect}`}
       style={style}
+      {...props}
     >
       {children}
       <svg className={`${shinyStyle.glowContainer}`}>

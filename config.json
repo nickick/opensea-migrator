@@ -12,7 +12,8 @@
   "text": {
     "steps": [
       {
-        "title": "Choose piece(s)"
+        "title": "Choose NFT",
+        "description": ["Select all the pieces you wish to migrate."]
       },
       {
         "title": "Set approvals",
@@ -44,9 +45,9 @@
     ]
   },
   "styles": {
-    "textColor": "#ffffff",
+    "textColor": "#FFFFFF",
     "textHighlighStyle": "",
-    "currentStepColor": "#FE9AEE",
+    "currentStepColor": "#665EF1",
     "previousStepColor": "#0050AA",
     "futureStepColor": "#D1D5DB",
     "ctaButtonColor": "#15803D",
