@@ -142,7 +142,6 @@ function Card({ selected, nft, setSelected, itemId }: CardProps) {
           }`}
         >
           {nft.name}
-          {JSON.stringify(visibility.isItemVisible(itemId))}
         </p>
       </div>
     </div>
