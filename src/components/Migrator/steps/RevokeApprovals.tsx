@@ -2,6 +2,7 @@ import Button from 'src/components/Button';
 import { useState } from 'react';
 import { StepText } from 'src/utils/types';
 import { StepBody, StepHeader, StepWrapper } from './Base';
+import ShinyButton from 'src/components/ShinyButton';
 
 type Props = {
   moveToBeginning: () => void;
@@ -30,17 +31,30 @@ const WrapPieces: React.FunctionComponent<Props> = ({
         currentStep={currentStep}
       />
       <StepBody isActive={isActive}>
-        {text.description?.map((desc) => (
-          <p key={desc.slice(0, 10)}>{desc}</p>
-        ))}
-        <Button onClick={() => setDisabled(false)} disabled={!disabled}>
-          {disabled ? text.buttonText : text.buttonConfirmationText}
-        </Button>
-        <div className="flex space-x-4 justify-self-end self-end">
-          <Button onClick={moveBackStep}>Back</Button>
-          <Button onClick={moveToBeginning} disabled={disabled}>
-            Start Over
-          </Button>
+        <div className="grow text-primaryColor space-y-4">
+          {text.description?.map((desc) => (
+            <p key={desc.slice(0, 10)}>{desc}</p>
+          ))}
+          <ShinyButton
+            className="bg-currentStepColor disabled:bg-opacity-20 transition-all rounded-full"
+            onClick={() => setDisabled(false)}
+            disabled={!disabled}
+          >
+            {disabled ? text.buttonText : text.buttonConfirmationText}
+          </ShinyButton>
+          <div className="flex space-x-4 justify-self-end self-end absolute bottom-6 right-8">
+            <Button onClick={moveBackStep} className="rounded-full">
+              Back
+            </Button>
+            <ShinyButton
+              onClick={moveToBeginning}
+              disabled={disabled}
+              background="bg-currentStepColor disabled:bg-opacity-20 transition-all"
+              className="rounded-full"
+            >
+              Start Over
+            </ShinyButton>
+          </div>
         </div>
       </StepBody>
     </StepWrapper>

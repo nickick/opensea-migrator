@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Button from 'src/components/Button';
+import ShinyButton from 'src/components/ShinyButton';
 import { StepText } from 'src/utils/types';
 import { StepBody, StepHeader, StepWrapper } from './Base';
 
@@ -31,36 +32,43 @@ const WrapPieces: React.FunctionComponent<Props> = ({
 
   return (
     <StepWrapper isActive={isActive}>
-      <StepHeader stepOrder={stepOrder} currentStep={currentStep}>
-        {text.title}
-      </StepHeader>
+      <StepHeader
+        title={text.title}
+        stepOrder={stepOrder}
+        currentStep={currentStep}
+      />
       <StepBody isActive={isActive}>
-        <>
+        <div className="grow text-primaryColor space-y-4">
           {disabled ? (
             <>
               {text.description?.map((desc) => (
                 <p key={desc.slice(0, 10)}>{desc}</p>
               ))}
-              <Button
+              <ShinyButton
+                className="bg-currentStepColor disabled:bg-opacity-20 transition-all rounded-full"
                 onClick={() => setDisabled(false)}
-                type="action"
                 disabled={!disabled}
               >
                 {text.buttonText}
-              </Button>
+              </ShinyButton>
             </>
           ) : (
             <div>{text.buttonConfirmationText}</div>
           )}
-          <div className="flex space-x-4 justify-self-end self-end">
-            <Button onClick={moveBackStep} type="secondary">
+          <div className="flex space-x-4 justify-self-end self-end absolute bottom-6 right-8">
+            <Button onClick={moveBackStep} className="rounded-full">
               Back
             </Button>
-            <Button onClick={moveToNextStep} disabled={disabled}>
+            <ShinyButton
+              onClick={moveToNextStep}
+              disabled={disabled}
+              background="bg-currentStepColor disabled:bg-opacity-20 transition-all"
+              className="rounded-full"
+            >
               Continue
-            </Button>
+            </ShinyButton>
           </div>
-        </>
+        </div>
       </StepBody>
     </StepWrapper>
   );
