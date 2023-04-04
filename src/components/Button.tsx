@@ -1,5 +1,6 @@
 import React, { CSSProperties } from 'react';
 import { twMerge } from 'tailwind-merge';
+import Spinner from './Spinner';
 
 type ButtonProps = {
   background?: string;
@@ -7,6 +8,7 @@ type ButtonProps = {
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
+  loading?: boolean;
   onClick: () => void;
   style?: CSSProperties;
 };
@@ -17,11 +19,12 @@ const Button = ({
   children,
   className,
   disabled,
+  loading,
   onClick,
   style,
 }: ButtonProps) => {
   const classNames = twMerge(
-    'rounded backdrop-blur-2 text-white backdrop-blur-xl whitespace-nowrap py-2 px-8 disabled:cursor-not-allowed',
+    'flex items-center rounded backdrop-blur-2 text-white backdrop-blur-xl whitespace-nowrap py-2 px-8 disabled:cursor-not-allowed',
     background,
     border,
     className
@@ -36,6 +39,7 @@ const Button = ({
       disabled={disabled}
     >
       {children}
+      {loading && <Spinner />}
     </button>
   );
 };

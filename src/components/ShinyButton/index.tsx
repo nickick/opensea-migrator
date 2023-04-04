@@ -8,6 +8,7 @@ type ShinyButtonProps = {
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
+  loading?: boolean;
   onClick: () => void;
   style?: CSSProperties;
 };

@@ -73,7 +73,7 @@ function LeftArrow() {
     <button
       disabled={isFirstItemVisible}
       onClick={() => clickHandler()}
-      className="py-3 px-6 bg-primaryColor bg-opacity-20 rounded-full border-gray-100"
+      className="py-3 px-6 bg-primaryColor bg-opacity-20 rounded-full border-gray-100 flex justify-center items-center"
     >
       <Image
         src="/arrow-right.svg"
@@ -94,7 +94,7 @@ function RightArrow() {
     <button
       disabled={isLastItemVisible}
       onClick={() => clickHandler()}
-      className="py-3 px-6 bg-primaryColor bg-opacity-20 rounded-full border-gray-100"
+      className="py-3 px-6 bg-primaryColor bg-opacity-20 rounded-full border-gray-100 flex justify-center items-center"
     >
       <Image
         src="/arrow-right.svg"
@@ -135,6 +135,7 @@ function Card({ selected, nft, setSelected, itemId }: CardProps) {
           id={`select-${nft.token_id}`}
           checked={selected}
           className="bg-primaryColor border-currentStepColor text-currentStepColor focus:bg-currentStepColor w-6 h-6"
+          readOnly
         />
         <p
           className={`text-xl ${

@@ -1,7 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'src/components/Button';
 import ShinyButton from 'src/components/ShinyButton';
 import { StepText } from 'src/utils/types';
+import {
+  useAccount,
+  useContractWrite,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from 'wagmi';
 import { StepBody, StepHeader, StepWrapper } from './Base';
 
 type Props = {
@@ -21,7 +27,32 @@ const SetApprovals: React.FunctionComponent<Props> = ({
 }) => {
   const isActive = stepOrder === currentStep;
 
-  const [disabled, setDisabled] = useState(true);
+  const { config } = usePrepareContractWrite({
+    address: process.env
+      .NEXT_PUBLIC_MIGRATE_FROM_CONTRACT_ADDRESS as `0x${string}`,
+    abi: [
+      {
+        name: 'setApprovalForAll',
+        inputs: [
+          { internalType: 'address', name: 'operator', type: 'address' },
+          { internalType: 'bool', name: 'approved', type: 'bool' },
+        ],
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+      },
+    ],
+    args: [
+      process.env.NEXT_PUBLIC_MIGRATE_TO_CONTRACT_ADDRESS as `0x${string}`,
+      true,
+    ],
+    functionName: 'setApprovalForAll',
+  });
+
+  const { data, write } = useContractWrite(config);
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
 
   return (
     <StepWrapper isActive={isActive}>
@@ -36,11 +67,14 @@ const SetApprovals: React.FunctionComponent<Props> = ({
             <p key={desc.slice(0, 10)}>{desc}</p>
           ))}
           <ShinyButton
-            background="bg-currentStepColor disabled:bg-opacity-20 transition-all rounded-full"
-            onClick={() => setDisabled(false)}
-            disabled={!disabled}
+            background="bg-currentStepColor disabled:bg-opacity-20 transition-all rounded-full whitespace-nowrap"
+            disabled={!write || isLoading || isSuccess}
+            loading={isLoading}
+            onClick={() => {
+              write?.();
+            }}
           >
-            {disabled ? text.buttonText : text.buttonConfirmationText}
+            {!isSuccess ? text.buttonText : text.buttonConfirmationText}
           </ShinyButton>
           <div className="flex space-x-4 justify-self-end self-end absolute bottom-6 right-8">
             <Button onClick={moveBackStep} className="rounded-full">
@@ -48,7 +82,7 @@ const SetApprovals: React.FunctionComponent<Props> = ({
             </Button>
             <ShinyButton
               onClick={moveToNextStep}
-              disabled={disabled}
+              disabled={isSuccess}
               background="bg-currentStepColor disabled:bg-opacity-20 transition-all"
               className="rounded-full"
             >
