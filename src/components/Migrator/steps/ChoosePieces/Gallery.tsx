@@ -3,6 +3,7 @@ import { SetStateAction, useContext, useEffect, useState } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useAccount } from 'wagmi';
+import PiecesContext from '../../PiecesContext';
 
 type NFT = {
   image_url: string;
@@ -10,15 +11,7 @@ type NFT = {
   token_id: string;
 };
 
-type Props = {
-  selectedNfts: Set<string>;
-  setSelectedNfts: (value: SetStateAction<Set<string>>) => void;
-};
-
-const PiecesGallery: React.FunctionComponent<Props> = ({
-  selectedNfts,
-  setSelectedNfts,
-}) => {
+const PiecesGallery: React.FunctionComponent = () => {
   const { address } = useAccount();
 
   const [nfts, setNfts] = useState<NFT[]>([]);
@@ -33,13 +26,15 @@ const PiecesGallery: React.FunctionComponent<Props> = ({
     fetchNFTs();
   }, [address]);
 
+  const context = useContext(PiecesContext);
+
   const setSelected = (token_id: string) => {
     return () => {
-      const newSelectedNFts = new Set(selectedNfts);
-      selectedNfts.has(token_id)
+      const newSelectedNFts = new Set(context?.pieces);
+      context?.pieces.has(token_id)
         ? newSelectedNFts.delete(token_id)
         : newSelectedNFts.add(token_id);
-      setSelectedNfts(newSelectedNFts);
+      context?.setPieces(newSelectedNFts);
     };
   };
 
@@ -49,7 +44,7 @@ const PiecesGallery: React.FunctionComponent<Props> = ({
         <Card
           nft={nft}
           setSelected={setSelected}
-          selected={selectedNfts.has(nft.token_id)}
+          selected={context?.pieces?.has(nft.token_id) || false}
           key={nft.name}
           itemId={id.toString()}
         />
@@ -114,8 +109,6 @@ type CardProps = {
 };
 
 function Card({ selected, nft, setSelected, itemId }: CardProps) {
-  const visibility = useContext(VisibilityContext);
-
   return (
     <div
       key={nft.image_url}

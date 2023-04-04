@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { StepText } from 'src/utils/types';
 import { useAccount } from 'wagmi';
 import ConnectButton from '../ConnectButton';
@@ -7,6 +7,7 @@ import ChoosePieces from './steps/ChoosePieces';
 import RevokeApprovals from './steps/RevokeApprovals';
 import SetApprovals from './steps/SetApprovals';
 import WrapPieces from './steps/WrapPieces';
+import PiecesContext from './PiecesContext';
 
 type StepProps = {
   moveBackStep: () => void;
@@ -39,25 +40,34 @@ const MigratorSteps = ({ steps, stepText }: MigratorStepsProps) => {
     setStep(0);
   };
 
+  const [pieces, setPieces] = useState<Set<string>>(new Set());
+
   return (
-    <div className="w-full flex">
-      <div className="w-1/4 flex justify-center">
-        <StepIndicator index={step} stepText={stepText} />
+    <PiecesContext.Provider
+      value={{
+        pieces,
+        setPieces,
+      }}
+    >
+      <div className="w-full flex">
+        <div className="w-1/4 flex justify-center">
+          <StepIndicator index={step} stepText={stepText} />
+        </div>
+        <div className="w-3/4 h-full flex flex-col space-y-4">
+          {steps.map((stepComponent, i) => {
+            return React.createElement<StepProps>(stepComponent, {
+              moveBackStep,
+              moveToNextStep,
+              moveToBeginning,
+              stepOrder: i,
+              currentStep: step,
+              text: stepText[i],
+              key: i,
+            });
+          })}
+        </div>
       </div>
-      <div className="w-3/4 h-full flex flex-col space-y-4">
-        {steps.map((stepComponent, i) => {
-          return React.createElement<StepProps>(stepComponent, {
-            moveBackStep,
-            moveToNextStep,
-            moveToBeginning,
-            stepOrder: i,
-            currentStep: step,
-            text: stepText[i],
-            key: i,
-          });
-        })}
-      </div>
-    </div>
+    </PiecesContext.Provider>
   );
 };
 

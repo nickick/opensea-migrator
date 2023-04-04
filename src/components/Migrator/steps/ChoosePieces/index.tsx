@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ShinyButton from 'src/components/ShinyButton';
 import { StepText } from 'src/utils/types';
 import { useAccount } from 'wagmi';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
 import PiecesGallery from './Gallery';
+import PiecesContext from '../../PiecesContext';
 
 type Props = {
   moveToNextStep: () => void;
@@ -42,6 +43,8 @@ const ChoosePieces: React.FunctionComponent<Props> = ({
     fetchNFTs();
   }, [address]);
 
+  const piecesContext = useContext(PiecesContext);
+
   return (
     <StepWrapper isActive={isActive}>
       <StepHeader
@@ -51,14 +54,11 @@ const ChoosePieces: React.FunctionComponent<Props> = ({
         currentStep={currentStep}
       />
       <StepBody isActive={isActive}>
-        <PiecesGallery
-          setSelectedNfts={setSelectedNfts}
-          selectedNfts={selectedNfts}
-        />
+        <PiecesGallery />
         <div className="flex space-x-4 self-end absolute bottom-6 right-8">
           <ShinyButton
             onClick={moveToNextStep}
-            disabled={selectedNfts.size === 0}
+            disabled={piecesContext?.pieces.size === 0}
             background="bg-currentStepColor disabled:bg-opacity-20 transition-all"
             className="rounded-full"
           >
