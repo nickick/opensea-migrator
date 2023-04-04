@@ -7,7 +7,7 @@ import ChoosePieces from './steps/ChoosePieces';
 import RevokeApprovals from './steps/RevokeApprovals';
 import SetApprovals from './steps/SetApprovals';
 import WrapPieces from './steps/WrapPieces';
-import PiecesContext from './PiecesContext';
+import PiecesContext, { NFT } from './PiecesContext';
 
 type StepProps = {
   moveBackStep: () => void;
@@ -41,12 +41,15 @@ const MigratorSteps = ({ steps, stepText }: MigratorStepsProps) => {
   };
 
   const [pieces, setPieces] = useState<Set<string>>(new Set());
+  const [nfts, setNfts] = useState<NFT[]>([]);
 
   return (
     <PiecesContext.Provider
       value={{
         pieces,
         setPieces,
+        nfts,
+        setNfts,
       }}
     >
       <div className="w-full flex">

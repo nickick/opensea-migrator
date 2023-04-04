@@ -13,12 +13,6 @@ type Props = {
   currentStep: number;
 };
 
-type nft = {
-  image_url: string;
-  name: string;
-  token_id: string;
-};
-
 const ChoosePieces: React.FunctionComponent<Props> = ({
   moveToNextStep,
   stepOrder,
@@ -26,22 +20,6 @@ const ChoosePieces: React.FunctionComponent<Props> = ({
   text,
 }) => {
   const isActive = stepOrder === currentStep;
-
-  const { address } = useAccount();
-
-  const [nfts, setNfts] = useState<nft[]>([]);
-
-  const [selectedNfts, setSelectedNfts] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    async function fetchNFTs() {
-      const nftResponse = await fetch(`/api/wallet/${address}`);
-      const nfts: nft[] = await nftResponse.json();
-      setNfts(nfts);
-    }
-
-    fetchNFTs();
-  }, [address]);
 
   const piecesContext = useContext(PiecesContext);
 

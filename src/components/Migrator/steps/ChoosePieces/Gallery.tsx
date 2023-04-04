@@ -3,30 +3,22 @@ import { SetStateAction, useContext, useEffect, useState } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import { useAccount } from 'wagmi';
-import PiecesContext from '../../PiecesContext';
-
-type NFT = {
-  image_url: string;
-  name: string;
-  token_id: string;
-};
+import PiecesContext, { NFT } from '../../PiecesContext';
 
 const PiecesGallery: React.FunctionComponent = () => {
   const { address } = useAccount();
 
-  const [nfts, setNfts] = useState<NFT[]>([]);
+  const context = useContext(PiecesContext);
 
   useEffect(() => {
     async function fetchNFTs() {
       const nftResponse = await fetch(`/api/wallet/${address}`);
       const nfts: NFT[] = await nftResponse.json();
-      setNfts(nfts);
+      context?.setNfts?.(nfts);
     }
 
     fetchNFTs();
-  }, [address]);
-
-  const context = useContext(PiecesContext);
+  }, [address, context]);
 
   const setSelected = (token_id: string) => {
     return () => {
@@ -40,7 +32,7 @@ const PiecesGallery: React.FunctionComponent = () => {
 
   return (
     <ScrollMenu Footer={Arrows} wrapperClassName="max-w-full">
-      {nfts.map((nft, id) => (
+      {(context?.nfts || []).map((nft, id) => (
         <Card
           nft={nft}
           setSelected={setSelected}

@@ -92,7 +92,7 @@ const SetApprovals: React.FunctionComponent<Props> = ({
         currentStep={currentStep}
       />
       <StepBody isActive={isActive}>
-        <div className="grow text-primaryColor space-y-4">
+        <div className="grow text-primaryColor space-y-4 pr-12">
           {text.description?.map((desc) => (
             <p key={desc.slice(0, 10)}>{desc}</p>
           ))}
@@ -100,9 +100,7 @@ const SetApprovals: React.FunctionComponent<Props> = ({
             background="bg-currentStepColor disabled:bg-opacity-20 transition-all rounded-full whitespace-nowrap"
             disabled={!write || isLoading || isSuccess || hasAccess}
             loading={isLoading || isReadLoading}
-            onClick={() => {
-              write?.();
-            }}
+            onClick={() => write?.()}
           >
             {!isSuccess && !hasAccess
               ? text.buttonText
