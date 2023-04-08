@@ -1,12 +1,4 @@
-import { StepText } from 'src/utils/types';
 import { twMerge } from 'tailwind-merge';
-
-type Props = {
-  moveToNextStep: () => void;
-  text: StepText;
-  stepOrder: number;
-  currentStep: number;
-};
 
 export const StepWrapper = ({
   isActive,

@@ -1,27 +1,31 @@
-import { useContext, useEffect, useState } from 'react';
 import ShinyButton from 'src/components/ShinyButton';
+import { NFT, useSelectPieces } from 'src/components/usePieces';
 import { StepText } from 'src/utils/types';
-import { useAccount } from 'wagmi';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
 import PiecesGallery from './Gallery';
-import PiecesContext from '../../PiecesContext';
 
 type Props = {
-  moveToNextStep: () => void;
-  text: StepText;
-  stepOrder: number;
+  nfts: NFT[];
+  loading: boolean;
   currentStep: number;
+  moveToNextStep: () => void;
+  selectedPieces: Set<string>;
+  setSelected: (token_id: string) => () => void;
+  stepOrder: number;
+  text: StepText;
 };
 
 const ChoosePieces: React.FunctionComponent<Props> = ({
-  moveToNextStep,
-  stepOrder,
   currentStep,
+  loading,
+  nfts,
+  moveToNextStep,
+  setSelected,
+  selectedPieces,
+  stepOrder,
   text,
 }) => {
   const isActive = stepOrder === currentStep;
-
-  const piecesContext = useContext(PiecesContext);
 
   return (
     <StepWrapper isActive={isActive}>
@@ -32,11 +36,16 @@ const ChoosePieces: React.FunctionComponent<Props> = ({
         currentStep={currentStep}
       />
       <StepBody isActive={isActive}>
-        <PiecesGallery />
+        <PiecesGallery
+          nfts={nfts}
+          selectedPieces={selectedPieces}
+          setSelected={setSelected}
+          loading={loading}
+        />
         <div className="flex space-x-4 self-end absolute bottom-6 right-8">
           <ShinyButton
             onClick={moveToNextStep}
-            disabled={piecesContext?.pieces.size === 0}
+            disabled={selectedPieces.size === 0}
             background="bg-currentStepColor disabled:bg-opacity-20 transition-all"
             className="rounded-full"
           >

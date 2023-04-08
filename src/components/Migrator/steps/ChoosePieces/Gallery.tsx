@@ -1,42 +1,38 @@
 import Image from 'next/image';
-import { SetStateAction, useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
-import { useAccount } from 'wagmi';
-import PiecesContext, { NFT } from '../../PiecesContext';
+import Spinner from 'src/components/Spinner';
+import { NFT, useSelectPieces } from 'src/components/usePieces';
 
-const PiecesGallery: React.FunctionComponent = () => {
-  const { address } = useAccount();
+type Props = {
+  nfts: NFT[];
+  loading: boolean;
+  setSelected: (token_id: string) => () => void;
+  selectedPieces: Set<string>;
+};
 
-  const context = useContext(PiecesContext);
-
-  useEffect(() => {
-    async function fetchNFTs() {
-      const nftResponse = await fetch(`/api/wallet/${address}`);
-      const nfts: NFT[] = await nftResponse.json();
-      context?.setNfts?.(nfts);
-    }
-
-    fetchNFTs();
-  }, [address, context]);
-
-  const setSelected = (token_id: string) => {
-    return () => {
-      const newSelectedNFts = new Set(context?.pieces);
-      context?.pieces.has(token_id)
-        ? newSelectedNFts.delete(token_id)
-        : newSelectedNFts.add(token_id);
-      context?.setPieces(newSelectedNFts);
-    };
-  };
+const PiecesGallery = ({
+  nfts,
+  loading,
+  setSelected,
+  selectedPieces,
+}: Props) => {
+  if (loading) {
+    return (
+      <div className="text-primaryColor flex items-center">
+        Finding your Seerlight pieces... <Spinner />
+      </div>
+    );
+  }
 
   return (
     <ScrollMenu Footer={Arrows} wrapperClassName="max-w-full">
-      {(context?.nfts || []).map((nft, id) => (
+      {(nfts || []).map((nft, id) => (
         <Card
           nft={nft}
           setSelected={setSelected}
-          selected={context?.pieces?.has(nft.token_id) || false}
+          selected={selectedPieces.has(nft.token_id) || false}
           key={nft.name}
           itemId={id.toString()}
         />
@@ -100,7 +96,7 @@ type CardProps = {
   itemId: string;
 };
 
-function Card({ selected, nft, setSelected, itemId }: CardProps) {
+function Card({ selected, nft, setSelected }: CardProps) {
   return (
     <div
       key={nft.image_url}

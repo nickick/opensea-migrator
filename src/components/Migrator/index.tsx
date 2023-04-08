@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StepText } from 'src/utils/types';
 import { useAccount } from 'wagmi';
 import ConnectButton from '../ConnectButton';
@@ -7,12 +7,16 @@ import ChoosePieces from './steps/ChoosePieces';
 import RevokeApprovals from './steps/RevokeApprovals';
 import SetApprovals from './steps/SetApprovals';
 import WrapPieces from './steps/WrapPieces';
-import PiecesContext, { NFT } from './PiecesContext';
+import { NFT, useSelectPieces } from 'src/components/usePieces';
 
 type StepProps = {
   moveBackStep: () => void;
   moveToNextStep: () => void;
   moveToBeginning: () => void;
+  setSelected: (token_id: string) => () => void;
+  selectedPieces: Set<string>;
+  nfts: NFT[];
+  loading: boolean;
   stepOrder: number;
   currentStep: number;
   text: StepText;
@@ -40,37 +44,31 @@ const MigratorSteps = ({ steps, stepText }: MigratorStepsProps) => {
     setStep(0);
   };
 
-  const [pieces, setPieces] = useState<Set<string>>(new Set());
-  const [nfts, setNfts] = useState<NFT[]>([]);
+  const { selectedPieces, setSelected, nfts, loading } = useSelectPieces();
 
   return (
-    <PiecesContext.Provider
-      value={{
-        pieces,
-        setPieces,
-        nfts,
-        setNfts,
-      }}
-    >
-      <div className="w-full flex">
-        <div className="w-1/4 flex justify-center">
-          <StepIndicator index={step} stepText={stepText} />
-        </div>
-        <div className="w-3/4 h-full flex flex-col space-y-4">
-          {steps.map((stepComponent, i) => {
-            return React.createElement<StepProps>(stepComponent, {
-              moveBackStep,
-              moveToNextStep,
-              moveToBeginning,
-              stepOrder: i,
-              currentStep: step,
-              text: stepText[i],
-              key: i,
-            });
-          })}
-        </div>
+    <div className="w-full flex">
+      <div className="w-1/4 flex justify-center">
+        <StepIndicator index={step} stepText={stepText} />
       </div>
-    </PiecesContext.Provider>
+      <div className="w-3/4 h-full flex flex-col space-y-4">
+        {steps.map((stepComponent, i) => {
+          return React.createElement<StepProps>(stepComponent, {
+            moveBackStep,
+            moveToNextStep,
+            moveToBeginning,
+            stepOrder: i,
+            currentStep: step,
+            text: stepText[i],
+            selectedPieces,
+            setSelected,
+            loading,
+            nfts,
+            key: i,
+          });
+        })}
+      </div>
+    </div>
   );
 };
 

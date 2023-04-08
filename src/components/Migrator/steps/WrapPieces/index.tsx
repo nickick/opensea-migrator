@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
+import { BigNumber } from 'ethers';
+import Image from 'next/image';
+import { useState } from 'react';
 import Button from 'src/components/Button';
 import ShinyButton from 'src/components/ShinyButton';
+import { NFT, useSelectPieces } from 'src/components/usePieces';
 import { StepText } from 'src/utils/types';
-import { StepBody, StepHeader, StepWrapper } from '../Base';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
-import { BigNumber } from 'ethers';
-import PiecesContext from '../../PiecesContext';
-import Image from 'next/image';
+import { StepBody, StepHeader, StepWrapper } from '../Base';
 
 type WrapPieceProps = {
   image_url: string;
@@ -55,6 +55,8 @@ type WrapPiecesProps = {
   text: StepText;
   stepOrder: number;
   currentStep: number;
+  nfts: NFT[];
+  selectedPieces: Set<string>;
 };
 
 const WrapPieces: React.FunctionComponent<WrapPiecesProps> = ({
@@ -63,6 +65,8 @@ const WrapPieces: React.FunctionComponent<WrapPiecesProps> = ({
   text,
   stepOrder,
   currentStep,
+  nfts,
+  selectedPieces,
 }) => {
   const stepStyles =
     stepOrder === currentStep
@@ -74,8 +78,6 @@ const WrapPieces: React.FunctionComponent<WrapPiecesProps> = ({
   const isActive = stepOrder === currentStep;
 
   const [disabled, setDisabled] = useState(true);
-
-  const context = useContext(PiecesContext);
 
   return (
     <StepWrapper isActive={isActive}>
@@ -92,8 +94,8 @@ const WrapPieces: React.FunctionComponent<WrapPiecesProps> = ({
                 <p key={desc.slice(0, 10)}>{desc}</p>
               ))}
               <div className="flex flex-col">
-                {context?.nfts.map(({ token_id, image_url, name }) => {
-                  if (!context?.pieces.has(token_id)) {
+                {nfts.map(({ token_id, image_url, name }) => {
+                  if (!selectedPieces.has(token_id)) {
                     return null;
                   }
                   return (
