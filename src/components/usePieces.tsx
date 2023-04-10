@@ -10,14 +10,22 @@ export type NFT = {
 export const useSelectPieces = () => {
   const [loading, setLoading] = useState(false);
   const [nfts, setNfts] = useState<NFT[]>([]);
+  const [migratedNfts, setMigratedNfts] = useState<NFT[]>([]);
   const [selectedPieces, setSelectedPieces] = useState<Set<string>>(new Set());
   const { address } = useAccount();
 
-  async function fetchNFTs() {
+  async function fetchNFTs({
+    migrated,
+    setFn,
+  }: {
+    migrated: boolean;
+    setFn: (nfts: NFT[]) => void;
+  }) {
     setLoading(true);
     const nftResponse = await fetch(`/api/wallet/${address}`);
-    const nftRes: NFT[] = await nftResponse.json();
-    setNfts(nftRes);
+    const nftRes: NFT[][] = await nftResponse.json();
+    setFn(nftRes[0]);
+    setMigratedNfts(nftRes[1]);
     setLoading(false);
   }
 
@@ -25,7 +33,8 @@ export const useSelectPieces = () => {
 
   useEffect(() => {
     if (!loading && address && nfts.length === 0) {
-      memoizedFetchNFT();
+      memoizedFetchNFT({ migrated: false, setFn: setNfts });
+      memoizedFetchNFT({ migrated: true, setFn: setMigratedNfts });
     }
   }, [address, memoizedFetchNFT, loading, nfts.length]);
 
@@ -42,6 +51,7 @@ export const useSelectPieces = () => {
   return {
     loading,
     nfts,
+    migratedNfts,
     selectedPieces,
     setSelected,
   };

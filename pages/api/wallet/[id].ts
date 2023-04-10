@@ -1,26 +1,27 @@
-// Small api endpoint to process wallet NFTs a little more securely with Moralis API key.
+// Small api endpoint to process wallet NFTs for Opensea's contract and the migrating contract.
 
 import { NextApiRequest, NextApiResponse } from 'next';
+import { MIGRATING_FROM_TOKEN_IDS } from 'src/utils/tokenIds';
 
 const sdk = require('api')('@opensea/v1.0#7dtmkl3ojw4vb');
 
-const MIGRATING_FROM_TOKEN_IDS = [
-  // Goerli test values
-  '19581845787315820542309529478330392586387484444772608262239428011684022714369',
-  '19581845787315820542309529478330392586387484444772608262239428009484999458817',
-  '19581845787315820542309529478330392586387484444772608262239428010584511086593',
-  '19581845787315820542309529478330392586387484444772608262239428007285976203265',
-  '19581845787315820542309529478330392586387484444772608262239428006186464575489',
-];
-
 const fetchWalletNFTs = async (id: string) => {
-  const results = await sdk.retrievingAssetsRinkeby({
+  const fetchFn =
+    process.env.NODE_ENV === 'production'
+      ? sdk.retrievingAssets
+      : sdk.retrievingAssetsRinkeby;
+
+  const results = await fetchFn({
     owner: id,
     token_ids: MIGRATING_FROM_TOKEN_IDS,
-    include_orders: 'false',
   });
 
-  return results.assets;
+  const migratedResults = await sdk.retrievingAssetsRinkeby({
+    owner: id,
+    collection: process.env.NEXT_PUBLIC_MIGRATE_CREATOR_CONTRACT_ADDRESS,
+  });
+
+  return [results.assets || [], migratedResults.assets || []];
 };
 
 export default async function handler(

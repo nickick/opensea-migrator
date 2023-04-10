@@ -100,11 +100,11 @@ const SetApprovals: React.FunctionComponent<Props> = ({
             background="bg-currentStepColor disabled:bg-opacity-20 transition-all rounded-full whitespace-nowrap"
             disabled={!write || isLoading || isSuccess || hasAccess}
             loading={isLoading || isReadLoading}
-            onClick={() => write?.()}
+            onClick={() => {
+              write?.();
+            }}
           >
-            {!isSuccess && !hasAccess
-              ? text.buttonText
-              : text.buttonConfirmationText}
+            {!isSuccess ? text.buttonText : text.buttonConfirmationText}
           </ShinyButton>
           <div className="flex space-x-4 justify-self-end self-end absolute bottom-6 right-8">
             <Button onClick={moveBackStep} className="rounded-full">
@@ -112,7 +112,7 @@ const SetApprovals: React.FunctionComponent<Props> = ({
             </Button>
             <ShinyButton
               onClick={moveToNextStep}
-              disabled={isSuccess}
+              disabled={!hasAccess && !isSuccess}
               background="bg-currentStepColor disabled:bg-opacity-20 transition-all"
               className="rounded-full"
             >

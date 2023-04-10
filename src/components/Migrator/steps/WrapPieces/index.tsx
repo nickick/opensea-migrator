@@ -3,7 +3,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import Button from 'src/components/Button';
 import ShinyButton from 'src/components/ShinyButton';
-import { NFT, useSelectPieces } from 'src/components/usePieces';
+import Spinner from 'src/components/Spinner';
+import { NFT } from 'src/components/usePieces';
 import { StepText } from 'src/utils/types';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
@@ -36,14 +37,14 @@ const WrapPiece = ({ image_url, token_id, name }: WrapPieceProps) => {
   const { data, write, isLoading, isSuccess, isError } =
     useContractWrite(config);
 
-  console.log(write);
-
   return (
-    <div className="flex p-2">
-      <Image src={image_url} alt={name} width={16} height={16} className="" />
+    <div className="flex p-2 space-x-4 items-center">
+      <Image src={image_url} alt={name} width={32} height={32} className="" />
       <div>{name}</div>
       <ShinyButton className="rounded-full" onClick={() => write?.()}>
-        Wrap
+        {isLoading && <Spinner />}
+        {isSuccess && <>Wrapped!</>}
+        {!isLoading && !isSuccess && <>Wrap</>}
       </ShinyButton>
     </div>
   );
