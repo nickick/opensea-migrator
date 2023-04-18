@@ -13,6 +13,7 @@ import Migrator from 'src/components/Migrator';
 import { StepText } from 'src/utils/types';
 import Moon from 'src/components/Moon';
 import Clouds from 'src/components/Clouds.tsx';
+import { ModeSwitch } from 'src/components/ModeSwitch';
 
 type ConfigProps = {
   name: string;
@@ -115,6 +116,7 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
                   {props.title}
                 </span>
               </h1>
+              <ModeSwitch />
               <ConnectButton />
             </div>
             <p className="text-xl z-10 relative">

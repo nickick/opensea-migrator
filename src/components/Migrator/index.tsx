@@ -7,7 +7,7 @@ import ChoosePieces from './steps/ChoosePieces';
 import RevokeApprovals from './steps/RevokeApprovals';
 import SetApprovals from './steps/SetApprovals';
 import WrapPieces from './steps/WrapPieces';
-import { NFT, useSelectPieces } from 'src/components/usePieces';
+import { NFT, useSelectPieces } from 'src/utils/usePieces';
 
 type StepProps = {
   moveBackStep: () => void;

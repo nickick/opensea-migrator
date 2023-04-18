@@ -1,5 +1,5 @@
 import ShinyButton from 'src/components/ShinyButton';
-import { NFT, useSelectPieces } from 'src/components/usePieces';
+import { NFT, useSelectPieces } from 'src/utils/usePieces';
 import { StepText } from 'src/utils/types';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
 import PiecesGallery from './Gallery';

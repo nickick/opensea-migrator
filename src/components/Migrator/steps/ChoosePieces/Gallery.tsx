@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import Spinner from 'src/components/Spinner';
-import { NFT, useSelectPieces } from 'src/components/usePieces';
+import { NFT, useSelectPieces } from 'src/utils/usePieces';
 
 type Props = {
   nfts: NFT[];

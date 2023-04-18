@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Button from 'src/components/Button';
 import ShinyButton from 'src/components/ShinyButton';
 import Spinner from 'src/components/Spinner';
-import { NFT } from 'src/components/usePieces';
+import { NFT } from 'src/utils/usePieces';
 import { StepText } from 'src/utils/types';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
