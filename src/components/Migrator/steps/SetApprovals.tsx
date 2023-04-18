@@ -104,7 +104,9 @@ const SetApprovals: React.FunctionComponent<Props> = ({
               write?.();
             }}
           >
-            {!isSuccess ? text.buttonText : text.buttonConfirmationText}
+            {isSuccess || hasAccess
+              ? text.buttonConfirmationText
+              : text.buttonText}
           </ShinyButton>
           <div className="flex space-x-4 justify-self-end self-end absolute bottom-6 right-8">
             <Button onClick={moveBackStep} className="rounded-full">
