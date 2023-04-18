@@ -3,6 +3,7 @@ import { NFT, useSelectPieces } from 'src/utils/usePieces';
 import { StepText } from 'src/utils/types';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
 import PiecesGallery from './Gallery';
+import { useModeSwitch } from 'src/utils/useModeSwitch';
 
 type Props = {
   nfts: NFT[];
@@ -26,6 +27,7 @@ const ChoosePieces: React.FunctionComponent<Props> = ({
   text,
 }) => {
   const isActive = stepOrder === currentStep;
+  const { mode } = useModeSwitch();
 
   return (
     <StepWrapper isActive={isActive}>

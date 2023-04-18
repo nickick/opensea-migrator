@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { goerli } from 'wagmi';
-import { useNetwork } from 'wagmi';
+import { useContext } from 'react';
+import { Context } from 'src/components/Client';
+import { goerli, useNetwork } from 'wagmi';
 
 export const useModeSwitch = () => {
   const { chain } = useNetwork();
-  const [mode, setMode] = useState<'normal' | 'reverse' | 'demo'>('normal');
+  const { mode, setMode } = useContext(Context);
 
   function switchMode(mode: 'normal' | 'reverse' | 'demo') {
     if (chain?.id !== goerli.id) {
