@@ -47,7 +47,7 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
     >
       {/* Grid using CSS */}
       <div
-        className="w-full h-screen absolute z-0"
+        className="w-full h-full absolute z-0 top-0"
         style={{
           background: `repeating-linear-gradient(
             0deg, rgba(255,255,255,0), rgba(255,255,255,0) 68px, rgba(255, 255, 255, 0.3) 70px, rgba(255,255,255, 0.4) 5px
@@ -56,7 +56,7 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
         }}
       />
       <div
-        className="w-full h-screen absolute z-0"
+        className="w-full h-full absolute z-0 top-0"
         style={{
           background: `repeating-linear-gradient(
             90deg, rgba(255,255,255,0), rgba(255,255,255,0) 68px, rgba(255, 255, 255, 0.3) 70px, rgba(255,255,255, 0) 5px
@@ -67,7 +67,7 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
       {/* end grid */}
 
       {/* darkening scrim for overall page */}
-      <div className="bg-black opacity-20 h-screen w-screen absolute z-[2] top-0 left-0 mix-blend-overlay" />
+      <div className="bg-black opacity-20 h-full w-screen absolute z-[2] top-0 left-0 mix-blend-overlay" />
 
       <Head>
         <title>{props.name}</title>
