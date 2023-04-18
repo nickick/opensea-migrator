@@ -3,7 +3,8 @@ import { useContext } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import Spinner from 'src/components/Spinner';
-import { NFT, useSelectPieces } from 'src/utils/usePieces';
+import { useModeSwitch } from 'src/utils/useModeSwitch';
+import { NFT } from 'src/utils/usePieces';
 
 type Props = {
   nfts: NFT[];
@@ -18,10 +19,12 @@ const PiecesGallery = ({
   setSelected,
   selectedPieces,
 }: Props) => {
+  const { mode } = useModeSwitch();
   if (loading) {
     return (
       <div className="text-primaryColor flex items-center">
-        Finding your Seerlight pieces... <Spinner />
+        Finding your Seerlight {mode === 'reverse' ? 'wrapped' : ''} pieces...{' '}
+        <Spinner />
       </div>
     );
   }
@@ -32,7 +35,7 @@ const PiecesGallery = ({
         <Card
           nft={nft}
           setSelected={setSelected}
-          selected={selectedPieces.has(nft.token_id) || false}
+          selected={selectedPieces.has(nft.tokenId) || false}
           key={nft.name}
           itemId={id.toString()}
         />
@@ -99,21 +102,21 @@ type CardProps = {
 function Card({ selected, nft, setSelected }: CardProps) {
   return (
     <div
-      key={nft.image_url}
+      key={nft.image}
       className={`w-64 h-96 shrink-0 border-4 flex flex-col p-2 cursor-pointer rounded-lg bg-primaryColor transition-all duration-500 mr-4 ${
         selected
           ? 'opacity-100 border-currentStepColor bg-opacity-50'
           : 'opacity-50 bg-opacity-30'
       }`}
-      onClick={setSelected(nft.token_id)}
+      onClick={setSelected(nft.tokenId)}
     >
       <div className="w-full h-96 relative mb-2">
-        <Image src={nft.image_url} alt={nft.name} layout="fill" />
+        <Image src={nft.image} alt={nft.name} layout="fill" />
       </div>
       <div className="flex space-x-2 items-center">
         <input
           type="checkbox"
-          id={`select-${nft.token_id}`}
+          id={`select-${nft.tokenId}`}
           checked={selected}
           className="bg-primaryColor border-currentStepColor text-currentStepColor focus:bg-currentStepColor w-6 h-6"
           readOnly

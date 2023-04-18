@@ -110,7 +110,6 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
                 <span
                   style={{
                     color: props.styles.textColor,
-                    backgroundColor: props.styles.textHighlighStyle,
                   }}
                 >
                   {props.title}
@@ -123,7 +122,6 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
               <span
                 style={{
                   color: props.styles.textColor,
-                  backgroundColor: props.styles.textHighlighStyle,
                 }}
               >
                 {props.description}
@@ -133,7 +131,6 @@ const Home: NextPage<ConfigProps> = (props: ConfigProps) => {
               <span
                 style={{
                   color: props.styles.textColor,
-                  backgroundColor: props.styles.textHighlighStyle,
                 }}
               >
                 Learn more about the migration process here:

@@ -4,6 +4,7 @@ const nextConfig = {
     images: {
       allowFutureImage: true,
     },
+    topLevelAwait: true,
   },
   reactStrictMode: true,
   swcMinify: true,
@@ -11,7 +12,7 @@ const nextConfig = {
     dirs: ['pages', 'src'],
   },
   images: {
-    domains: ['i.seadn.io'],
+    domains: ['i.seadn.io', 'testnets-api.opensea.io', 'arweave.net'],
   },
 };
 

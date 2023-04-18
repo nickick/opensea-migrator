@@ -1,42 +1,43 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useSwitchNetwork } from 'wagmi';
+import { useModeSwitch } from './useModeSwitch';
 
 export type NFT = {
-  image_url: string;
+  image: string;
   name: string;
-  token_id: string;
+  tokenId: string;
 };
 
 export const useSelectPieces = () => {
   const [loading, setLoading] = useState(false);
   const [nfts, setNfts] = useState<NFT[]>([]);
-  const [migratedNfts, setMigratedNfts] = useState<NFT[]>([]);
   const [selectedPieces, setSelectedPieces] = useState<Set<string>>(new Set());
   const { address } = useAccount();
+  const { mode } = useModeSwitch();
 
-  async function fetchNFTs({
-    migrated,
-    setFn,
-  }: {
-    migrated: boolean;
-    setFn: (nfts: NFT[]) => void;
-  }) {
+  async function fetchNFTs({ setFn }: { setFn: (nfts: NFT[]) => void }) {
     setLoading(true);
-    const nftResponse = await fetch(`/api/wallet/${address}`);
-    const nftRes: NFT[][] = await nftResponse.json();
-    setFn(nftRes[0]);
-    setMigratedNfts(nftRes[1]);
+    const nftResponse = await fetch(
+      mode === 'normal'
+        ? `/api/wallet/${address}/unwrapped`
+        : `/api/wallet/${address}/wrapped`
+    );
+    const nftRes: NFT[] = await nftResponse.json();
+    setFn(nftRes);
     setLoading(false);
   }
 
-  const memoizedFetchNFT = useCallback(fetchNFTs, [address]);
+  const memoizedFetchNFT = useCallback(fetchNFTs, [address, mode]);
+
+  useEffect(() => {
+    setNfts([]);
+  }, [mode]);
 
   useEffect(() => {
     if (!loading && address && nfts.length === 0) {
-      memoizedFetchNFT({ migrated: false, setFn: setNfts });
-      memoizedFetchNFT({ migrated: true, setFn: setMigratedNfts });
+      memoizedFetchNFT({ setFn: setNfts });
     }
-  }, [address, memoizedFetchNFT, loading, nfts.length]);
+  }, [address, memoizedFetchNFT, loading, nfts.length, mode]);
 
   const setSelected = (token_id: string) => {
     return () => {
@@ -51,7 +52,6 @@ export const useSelectPieces = () => {
   return {
     loading,
     nfts,
-    migratedNfts,
     selectedPieces,
     setSelected,
   };
