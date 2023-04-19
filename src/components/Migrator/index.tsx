@@ -8,6 +8,7 @@ import RevokeApprovals from './steps/RevokeApprovals';
 import SetApprovals from './steps/SetApprovals';
 import WrapPieces from './steps/WrapPieces';
 import { NFT, useSelectPieces } from 'src/utils/usePieces';
+import { useModeSwitch } from 'src/utils/useModeSwitch';
 
 type StepProps = {
   moveBackStep: () => void;
@@ -45,6 +46,11 @@ const MigratorSteps = ({ steps, stepText }: MigratorStepsProps) => {
   };
 
   const { selectedPieces, setSelected, nfts, loading } = useSelectPieces();
+  const { mode } = useModeSwitch();
+
+  useEffect(() => {
+    moveToBeginning();
+  }, [mode]);
 
   return (
     <div className="w-full flex">

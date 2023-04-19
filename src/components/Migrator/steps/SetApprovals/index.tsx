@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react';
 import Button from 'src/components/Button';
 import ShinyButton from 'src/components/ShinyButton';
 import { StepText } from 'src/utils/types';
+import { useModeSwitch } from 'src/utils/useModeSwitch';
+import { useAccount, useWaitForTransaction } from 'wagmi';
+import { StepBody, StepHeader, StepWrapper } from '../Base';
 import {
-  useAccount,
-  useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
-  usePrepareSendTransaction,
-  useWaitForTransaction,
-} from 'wagmi';
-import { StepBody, StepHeader, StepWrapper } from './Base';
+  useReadIsApproved,
+  useWriteContractApproval,
+} from './contractInteractions';
 
 type Props = {
   moveToNextStep: () => void;
@@ -31,55 +28,38 @@ const SetApprovals: React.FunctionComponent<Props> = ({
 
   const { address } = useAccount();
 
+  const { mode } = useModeSwitch();
+
+  const migrateFromAddress =
+    mode === 'normal'
+      ? process.env.NEXT_PUBLIC_MIGRATE_FROM_CONTRACT_ADDRESS
+      : process.env.NEXT_PUBLIC_MIGRATE_CREATOR_CONTRACT_ADDRESS;
+  const operatorAddress =
+    process.env.NEXT_PUBLIC_MIGRATE_OPERATOR_CONTRACT_ADDRESS;
+
   const {
     data: hasAccess,
     isError,
     isLoading: isReadLoading,
-  } = useContractRead({
-    address: process.env
-      .NEXT_PUBLIC_MIGRATE_FROM_CONTRACT_ADDRESS as `0x${string}`,
-    abi: [
-      {
-        inputs: [
-          { internalType: 'address', name: '_owner', type: 'address' },
-          { internalType: 'address', name: '_operator', type: 'address' },
-        ],
-        name: 'isApprovedForAll',
-        outputs: [{ internalType: 'bool', name: 'isOperator', type: 'bool' }],
-        stateMutability: 'view',
-        type: 'function',
-      },
-    ],
-    functionName: 'isApprovedForAll',
-    args: [
-      address as `0x${string}`,
-      process.env.NEXT_PUBLIC_MIGRATE_TO_CONTRACT_ADDRESS as `0x${string}`,
-    ],
-  });
+  } = useReadIsApproved(
+    address || '0x1',
+    operatorAddress as `0x${string}`,
+    migrateFromAddress as `0x${string}`
+  );
 
-  const { config } = usePrepareContractWrite({
-    address: process.env
-      .NEXT_PUBLIC_MIGRATE_FROM_CONTRACT_ADDRESS as `0x${string}`,
-    abi: [
-      {
-        name: 'setApprovalForAll',
-        inputs: [
-          { internalType: 'address', name: 'operator', type: 'address' },
-          { internalType: 'bool', name: 'approved', type: 'bool' },
-        ],
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-    ],
-    args: [
-      process.env.NEXT_PUBLIC_MIGRATE_TO_CONTRACT_ADDRESS as `0x${string}`,
-      true,
-    ],
-    functionName: 'setApprovalForAll',
-  });
+  const { data, write, error } = useWriteContractApproval(
+    operatorAddress as `0x${string}`,
+    migrateFromAddress as `0x${string}`,
+    true
+  );
 
-  const { data, write } = useContractWrite(config);
+  if (error) {
+    console.error('error!!!!', error);
+  }
+
+  console.log('migrateFromAddress', migrateFromAddress);
+  console.log('operatorAddress', operatorAddress);
+
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
   });

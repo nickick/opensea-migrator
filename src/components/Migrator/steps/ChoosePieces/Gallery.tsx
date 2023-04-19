@@ -36,7 +36,7 @@ const PiecesGallery = ({
           nft={nft}
           setSelected={setSelected}
           selected={selectedPieces.has(nft.tokenId) || false}
-          key={nft.name}
+          key={`${nft.name}-${id}`}
           itemId={id.toString()}
         />
       ))}

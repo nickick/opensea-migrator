@@ -8,43 +8,36 @@ import { NFT } from 'src/utils/usePieces';
 import { StepText } from 'src/utils/types';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
+import { useMoveTokens } from './contractInteractions';
+import { useModeSwitch } from 'src/utils/useModeSwitch';
 
 type WrapPieceProps = {
-  image_url: string;
-  token_id: string;
+  image: string;
   name: string;
+  tokenId: string;
 };
 
-const WrapPiece = ({ image_url, token_id, name }: WrapPieceProps) => {
-  const { config } = usePrepareContractWrite({
-    address: process.env
-      .NEXT_PUBLIC_MIGRATE_TO_CONTRACT_ADDRESS as `0x${string}`,
-    abi: [
-      {
-        name: 'wrap',
-        inputs: [
-          { internalType: 'uint256', name: 'oldTokenId', type: 'uint256' },
-        ],
-        outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-    ],
-    args: [BigNumber.from(token_id)],
-    functionName: 'wrap',
-  });
+const WrapPiece = ({ image, tokenId, name }: WrapPieceProps) => {
+  const operatorAddress = process.env
+    .NEXT_PUBLIC_MIGRATE_OPERATOR_CONTRACT_ADDRESS as `0x${string}`;
 
-  const { data, write, isLoading, isSuccess, isError } =
-    useContractWrite(config);
+  const { mode } = useModeSwitch();
+  const pre = mode === 'reverse' ? '(Un)' : '';
+
+  const { data, write, isLoading, isSuccess, isError } = useMoveTokens(
+    tokenId,
+    operatorAddress,
+    mode === 'normal' || mode === 'demo'
+  );
 
   return (
     <div className="flex p-2 space-x-4 items-center">
-      <Image src={image_url} alt={name} width={32} height={32} className="" />
+      <Image src={image} alt={name} width={32} height={32} className="" />
       <div>{name}</div>
       <ShinyButton className="rounded-full" onClick={() => write?.()}>
         {isLoading && <Spinner />}
-        {isSuccess && <>Wrapped!</>}
-        {!isLoading && !isSuccess && <>Wrap</>}
+        {isSuccess && <>{pre}Wrapped!</>}
+        {!isLoading && !isSuccess && <>{pre}Wrap</>}
       </ShinyButton>
     </div>
   );
@@ -95,15 +88,15 @@ const WrapPieces: React.FunctionComponent<WrapPiecesProps> = ({
                 <p key={desc.slice(0, 10)}>{desc}</p>
               ))}
               <div className="flex flex-col">
-                {nfts.map(({ token_id, image_url, name }) => {
-                  if (!selectedPieces.has(token_id)) {
+                {nfts.map(({ tokenId, image, name }) => {
+                  if (!selectedPieces.has(tokenId)) {
                     return null;
                   }
                   return (
                     <WrapPiece
-                      key={token_id}
-                      image_url={image_url}
-                      token_id={token_id}
+                      key={tokenId}
+                      image={image}
+                      tokenId={tokenId}
                       name={name}
                     />
                   );
