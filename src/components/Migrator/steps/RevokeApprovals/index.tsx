@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { StepText } from 'src/utils/types';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
 import ShinyButton from 'src/components/ShinyButton';
+import { useModeSwitch } from 'src/utils/useModeSwitch';
+import { useWriteContractApproval } from '../SetApprovals/contractInteractions';
 
 type Props = {
   moveToBeginning: () => void;
@@ -23,6 +25,21 @@ const WrapPieces: React.FunctionComponent<Props> = ({
 
   const [disabled, setDisabled] = useState(true);
 
+  const { mode } = useModeSwitch();
+
+  const migrateFromAddress =
+    mode === 'normal'
+      ? process.env.NEXT_PUBLIC_MIGRATE_FROM_CONTRACT_ADDRESS
+      : process.env.NEXT_PUBLIC_MIGRATE_CREATOR_CONTRACT_ADDRESS;
+  const operatorAddress =
+    process.env.NEXT_PUBLIC_MIGRATE_OPERATOR_CONTRACT_ADDRESS;
+
+  const { data, write, error, isLoading, isSuccess } = useWriteContractApproval(
+    operatorAddress as `0x${string}`,
+    migrateFromAddress as `0x${string}`,
+    false
+  );
+
   return (
     <StepWrapper isActive={isActive}>
       <StepHeader
@@ -37,10 +54,13 @@ const WrapPieces: React.FunctionComponent<Props> = ({
           ))}
           <ShinyButton
             className="bg-currentStepColor disabled:bg-opacity-20 transition-all rounded-full"
-            onClick={() => setDisabled(false)}
-            disabled={!disabled}
+            onClick={() => {
+              write?.();
+            }}
+            disabled={isLoading || isSuccess}
+            loading={isLoading}
           >
-            {disabled ? text.buttonText : text.buttonConfirmationText}
+            {isSuccess ? text.buttonText : text.buttonConfirmationText}
           </ShinyButton>
           <div className="flex space-x-4 justify-self-end self-end absolute bottom-6 right-8">
             <Button onClick={moveBackStep} className="rounded-full">
@@ -48,7 +68,7 @@ const WrapPieces: React.FunctionComponent<Props> = ({
             </Button>
             <ShinyButton
               onClick={moveToBeginning}
-              disabled={disabled}
+              disabled={isLoading || isSuccess}
               background="bg-currentStepColor disabled:bg-opacity-20 transition-all"
               className="rounded-full"
             >

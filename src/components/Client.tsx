@@ -40,7 +40,7 @@ type ClientProps = {
 
 export const Context = createContext({
   mode: 'normal',
-  setMode: (mode: 'normal' | 'reverse' | 'demo') => {},
+  setMode: (mode: 'normal' | 'reverse') => {},
   nfts: [] as NFT[],
   setNfts: (nfts: NFT[]) => {},
   selectedPieces: new Set<string>(),
@@ -48,7 +48,7 @@ export const Context = createContext({
 });
 
 const StateProvider = ({ children }: { children: React.ReactNode }) => {
-  const [mode, setMode] = useState<'normal' | 'reverse' | 'demo'>('normal');
+  const [mode, setMode] = useState<'normal' | 'reverse'>('normal');
   const [nfts, setNfts] = useState<NFT[]>([]);
   const [selectedPieces, setSelectedPieces] = useState<Set<string>>(new Set());
 

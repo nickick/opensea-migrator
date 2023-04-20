@@ -7,7 +7,7 @@ export const useModeSwitch = () => {
   const { chain } = useNetwork();
   const { mode, setMode } = useContext(Context);
 
-  function switchMode(mode: 'normal' | 'reverse' | 'demo') {
+  function switchMode(mode: 'normal' | 'reverse') {
     if (chain?.id !== goerli.id) {
       return;
     }

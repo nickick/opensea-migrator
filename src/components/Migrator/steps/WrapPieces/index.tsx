@@ -1,19 +1,19 @@
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Button from 'src/components/Button';
 import ShinyButton from 'src/components/ShinyButton';
 import Spinner from 'src/components/Spinner';
+import { OLD_TOKEN_TO_NEW_TOKEN_ID_MAP } from 'src/utils/tokenIds';
 import { StepText } from 'src/utils/types';
 import { useModeSwitch } from 'src/utils/useModeSwitch';
 import { NFT } from 'src/utils/usePieces';
+import { useAccount } from 'wagmi';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
 import {
   useIsContractAdmin,
   useMoveTokens,
   useResetTokenWrappability,
 } from './contractInteractions';
-import { useAccount } from 'wagmi';
-import { OLD_TOKEN_TO_NEW_TOKEN_ID_MAP } from 'src/utils/tokenIds';
 
 type WrapPieceProps = {
   image: string;
@@ -61,18 +61,21 @@ const WrapPiece = ({
     address as `0x${string}`
   );
 
+  const increment = useCallback(() => {
+    incrementWrappedCount();
+  }, [incrementWrappedCount]);
+
   useEffect(() => {
     if (isAdmin) {
       if (isSuccess && finishedResetting) {
-        incrementWrappedCount();
+        increment();
       }
     } else {
       if (isSuccess) {
-        incrementWrappedCount();
+        increment();
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess, isAdmin]);
+  }, [isSuccess, isAdmin, finishedResetting, increment]);
 
   return (
     <div className="flex p-2 space-x-4 items-center border rounded-xl">
@@ -139,12 +142,6 @@ const WrapPieces: React.FunctionComponent<WrapPiecesProps> = ({
     }
   }, [wrappedCount, selectedPieces.size]);
 
-  const { address } = useAccount();
-  const isAdmin = useIsContractAdmin(
-    process.env.NEXT_PUBLIC_MIGRATE_OPERATOR_CONTRACT_ADDRESS as `0x${string}`,
-    address as `0x${string}`
-  );
-
   const { mode } = useModeSwitch();
   const pre = mode === 'reverse' ? '(Un)' : '';
 
@@ -161,22 +158,25 @@ const WrapPieces: React.FunctionComponent<WrapPiecesProps> = ({
             {text.description?.map((desc) => (
               <p key={desc.slice(0, 10)}>{desc}</p>
             ))}
-            <div className="flex flex-col">
-              {nfts.map(({ tokenId, image, name }) => {
-                if (!selectedPieces.has(tokenId)) {
-                  return null;
-                }
-                return (
-                  <WrapPiece
-                    key={tokenId}
-                    image={image}
-                    tokenId={tokenId}
-                    incrementWrappedCount={incrementWrappedCount}
-                    name={name}
-                  />
-                );
-              })}
-            </div>
+            {nfts && nfts.map && (
+              <div className="flex flex-col">
+                {nfts.map(({ tokenId, image, name }) => {
+                  if (!selectedPieces.has(tokenId)) {
+                    return null;
+                  }
+                  return (
+                    <WrapPiece
+                      key={tokenId}
+                      image={image}
+                      tokenId={tokenId}
+                      incrementWrappedCount={incrementWrappedCount}
+                      name={name}
+                    />
+                  );
+                })}
+              </div>
+            )}
+
             <div>
               {pre}Wrapped {wrappedCount} / {selectedPieces.size} selected
               pieces.

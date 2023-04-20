@@ -38,15 +38,19 @@ const PiecesGallery = ({
 
   return (
     <ScrollMenu Footer={Arrows} wrapperClassName="max-w-full">
-      {(nfts || []).map((nft, id) => (
-        <Card
-          nft={nft}
-          setSelected={setSelected}
-          selected={selectedPieces.has(nft.tokenId) || false}
-          key={`${nft.name}-${id}`}
-          itemId={id.toString()}
-        />
-      ))}
+      {nfts && nfts.map && (
+        <div className="flex">
+          {nfts.map((nft, id) => (
+            <Card
+              nft={nft}
+              setSelected={setSelected}
+              selected={selectedPieces.has(nft.tokenId) || false}
+              key={`${nft.name}-${id}`}
+              itemId={id.toString()}
+            />
+          ))}
+        </div>
+      )}
     </ScrollMenu>
   );
 };

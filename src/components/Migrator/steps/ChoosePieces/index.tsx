@@ -15,7 +15,7 @@ type Props = {
   text: StepText;
 };
 
-const ChoosePieces: React.FunctionComponent<Props> = ({
+const ChoosePieces = ({
   currentStep,
   loading,
   nfts,
@@ -24,7 +24,7 @@ const ChoosePieces: React.FunctionComponent<Props> = ({
   selectedPieces,
   stepOrder,
   text,
-}) => {
+}: Props) => {
   const isActive = stepOrder === currentStep;
 
   return (

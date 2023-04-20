@@ -57,11 +57,5 @@ export const useWriteContractApproval = (
     functionName: 'setApprovalForAll',
   });
 
-  const { data, write, error } = useContractWrite(config);
-
-  return {
-    data,
-    write,
-    error,
-  };
+  return useContractWrite(config);
 };

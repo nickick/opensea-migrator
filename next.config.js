@@ -4,7 +4,6 @@ const nextConfig = {
     images: {
       allowFutureImage: true,
     },
-    topLevelAwait: true,
   },
   reactStrictMode: true,
   swcMinify: true,
