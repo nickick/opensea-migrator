@@ -1,23 +1,33 @@
-import { BigNumber } from 'ethers';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'src/components/Button';
 import ShinyButton from 'src/components/ShinyButton';
 import Spinner from 'src/components/Spinner';
-import { NFT } from 'src/utils/usePieces';
 import { StepText } from 'src/utils/types';
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
-import { StepBody, StepHeader, StepWrapper } from '../Base';
-import { useMoveTokens } from './contractInteractions';
 import { useModeSwitch } from 'src/utils/useModeSwitch';
+import { NFT } from 'src/utils/usePieces';
+import { StepBody, StepHeader, StepWrapper } from '../Base';
+import {
+  useIsContractAdmin,
+  useMoveTokens,
+  useResetTokenWrappability,
+} from './contractInteractions';
+import { useAccount } from 'wagmi';
+import { OLD_TOKEN_TO_NEW_TOKEN_ID_MAP } from 'src/utils/tokenIds';
 
 type WrapPieceProps = {
   image: string;
   name: string;
   tokenId: string;
+  incrementWrappedCount: () => void;
 };
 
-const WrapPiece = ({ image, tokenId, name }: WrapPieceProps) => {
+const WrapPiece = ({
+  image,
+  tokenId,
+  name,
+  incrementWrappedCount,
+}: WrapPieceProps) => {
   const operatorAddress = process.env
     .NEXT_PUBLIC_MIGRATE_OPERATOR_CONTRACT_ADDRESS as `0x${string}`;
 
@@ -30,15 +40,66 @@ const WrapPiece = ({ image, tokenId, name }: WrapPieceProps) => {
     mode === 'normal' || mode === 'demo'
   );
 
+  const newTokenIdToOldTokenId: { [key: string]: string } = Object.fromEntries(
+    Object.entries(OLD_TOKEN_TO_NEW_TOKEN_ID_MAP).map(([key, value]) => [
+      value,
+      key,
+    ])
+  );
+
+  const { write: resetToken, isSuccess: finishedResetting } =
+    useResetTokenWrappability(
+      (OLD_TOKEN_TO_NEW_TOKEN_ID_MAP[tokenId]
+        ? tokenId
+        : newTokenIdToOldTokenId[tokenId]) as string,
+      operatorAddress
+    );
+
+  const { address } = useAccount();
+  const isAdmin = useIsContractAdmin(
+    process.env.NEXT_PUBLIC_MIGRATE_OPERATOR_CONTRACT_ADDRESS as `0x${string}`,
+    address as `0x${string}`
+  );
+
+  useEffect(() => {
+    if (isAdmin) {
+      if (isSuccess && finishedResetting) {
+        incrementWrappedCount();
+      }
+    } else {
+      if (isSuccess) {
+        incrementWrappedCount();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, isAdmin]);
+
   return (
-    <div className="flex p-2 space-x-4 items-center">
-      <Image src={image} alt={name} width={32} height={32} className="" />
+    <div className="flex p-2 space-x-4 items-center border rounded-xl">
+      <div className="h-32 w-32 relative border rounded-xl overflow-hidden">
+        <Image src={image} alt={name} layout="fill" objectFit="cover" />
+      </div>
       <div>{name}</div>
-      <ShinyButton className="rounded-full" onClick={() => write?.()}>
+      <ShinyButton
+        className="rounded-full"
+        onClick={() => write?.()}
+        disabled={isSuccess}
+      >
         {isLoading && <Spinner />}
         {isSuccess && <>{pre}Wrapped!</>}
         {!isLoading && !isSuccess && <>{pre}Wrap</>}
       </ShinyButton>
+      {isAdmin && (
+        <Button
+          disabled={!isAdmin || finishedResetting}
+          onClick={() => {
+            resetToken?.();
+          }}
+          className="rounded-full"
+        >
+          Admin detected! Reset Token Wrappability
+        </Button>
+      )}
     </div>
   );
 };
@@ -62,64 +123,80 @@ const WrapPieces: React.FunctionComponent<WrapPiecesProps> = ({
   nfts,
   selectedPieces,
 }) => {
-  const stepStyles =
-    stepOrder === currentStep
-      ? 'bg-currentStepColor text-white'
-      : stepOrder > currentStep
-      ? 'bg-futureStepColor text-black'
-      : 'bg-previousStepColor opacity-50 text-white';
-
   const isActive = stepOrder === currentStep;
 
-  const [disabled, setDisabled] = useState(true);
+  const [completed, setCompleted] = useState(false);
+  const [wrappedCount, setWrappedCount] = useState(0);
+  function incrementWrappedCount() {
+    setWrappedCount(wrappedCount + 1);
+  }
+
+  useEffect(() => {
+    if (wrappedCount === selectedPieces.size) {
+      setCompleted(true);
+    } else {
+      setCompleted(false);
+    }
+  }, [wrappedCount, selectedPieces.size]);
+
+  const { address } = useAccount();
+  const isAdmin = useIsContractAdmin(
+    process.env.NEXT_PUBLIC_MIGRATE_OPERATOR_CONTRACT_ADDRESS as `0x${string}`,
+    address as `0x${string}`
+  );
+
+  const { mode } = useModeSwitch();
+  const pre = mode === 'reverse' ? '(Un)' : '';
 
   return (
     <StepWrapper isActive={isActive}>
       <StepHeader
-        title={text.title}
+        title={`${pre}${text.title}`}
         stepOrder={stepOrder}
         currentStep={currentStep}
       />
       <StepBody isActive={isActive}>
-        <div className="grow text-primaryColor space-y-4">
-          {disabled ? (
-            <>
-              {text.description?.map((desc) => (
-                <p key={desc.slice(0, 10)}>{desc}</p>
-              ))}
-              <div className="flex flex-col">
-                {nfts.map(({ tokenId, image, name }) => {
-                  if (!selectedPieces.has(tokenId)) {
-                    return null;
-                  }
-                  return (
-                    <WrapPiece
-                      key={tokenId}
-                      image={image}
-                      tokenId={tokenId}
-                      name={name}
-                    />
-                  );
-                })}
+        <div className="grow text-primaryColor space-y-4 mr-10">
+          <>
+            {text.description?.map((desc) => (
+              <p key={desc.slice(0, 10)}>{desc}</p>
+            ))}
+            <div className="flex flex-col">
+              {nfts.map(({ tokenId, image, name }) => {
+                if (!selectedPieces.has(tokenId)) {
+                  return null;
+                }
+                return (
+                  <WrapPiece
+                    key={tokenId}
+                    image={image}
+                    tokenId={tokenId}
+                    incrementWrappedCount={incrementWrappedCount}
+                    name={name}
+                  />
+                );
+              })}
+            </div>
+            <div>
+              {pre}Wrapped {wrappedCount} / {selectedPieces.size} selected
+              pieces.
+            </div>
+            {completed && (
+              <div>
+                {mode === 'normal'
+                  ? text.buttonConfirmationText
+                  : 'Your piece has been unwrapped and reset!'}
               </div>
-              <ShinyButton
-                className="bg-currentStepColor disabled:bg-opacity-20 transition-all rounded-full"
-                onClick={() => setDisabled(false)}
-                disabled={!disabled}
-              >
-                {text.buttonText}
-              </ShinyButton>
-            </>
-          ) : (
-            <div>{text.buttonConfirmationText}</div>
-          )}
+            )}
+          </>
+
           <div className="flex space-x-4 justify-self-end self-end absolute bottom-6 right-8">
             <Button onClick={moveBackStep} className="rounded-full">
               Back
             </Button>
             <ShinyButton
               onClick={moveToNextStep}
-              disabled={disabled}
+              disabled={!completed}
               background="bg-currentStepColor disabled:bg-opacity-20 transition-all"
               className="rounded-full"
             >

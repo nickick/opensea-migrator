@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { Context } from 'src/components/Client';
 import { goerli, useNetwork } from 'wagmi';
+import { useSelectPieces } from './usePieces';
 
 export const useModeSwitch = () => {
   const { chain } = useNetwork();

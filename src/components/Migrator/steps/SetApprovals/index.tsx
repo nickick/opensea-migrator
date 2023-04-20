@@ -53,13 +53,6 @@ const SetApprovals: React.FunctionComponent<Props> = ({
     true
   );
 
-  if (error) {
-    console.error('error!!!!', error);
-  }
-
-  console.log('migrateFromAddress', migrateFromAddress);
-  console.log('operatorAddress', operatorAddress);
-
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
   });

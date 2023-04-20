@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useAccount, useSwitchNetwork } from 'wagmi';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { useModeSwitch } from './useModeSwitch';
+import { Context } from 'src/components/Client';
 
 export type NFT = {
   image: string;
@@ -10,8 +11,8 @@ export type NFT = {
 
 export const useSelectPieces = () => {
   const [loading, setLoading] = useState(false);
-  const [nfts, setNfts] = useState<NFT[]>([]);
-  const [selectedPieces, setSelectedPieces] = useState<Set<string>>(new Set());
+  const { nfts, setNfts, selectedPieces, setSelectedPieces } =
+    useContext(Context);
   const { address } = useAccount();
   const { mode } = useModeSwitch();
 
@@ -31,13 +32,13 @@ export const useSelectPieces = () => {
 
   useEffect(() => {
     setNfts([]);
-  }, [mode]);
+  }, [mode, setNfts]);
 
   useEffect(() => {
     if (!loading && address && nfts.length === 0) {
       memoizedFetchNFT({ setFn: setNfts });
     }
-  }, [address, memoizedFetchNFT, loading, nfts.length, mode]);
+  }, [address, memoizedFetchNFT, loading, nfts.length, mode, setNfts]);
 
   const setSelected = (token_id: string) => {
     return () => {
@@ -49,10 +50,15 @@ export const useSelectPieces = () => {
     };
   };
 
+  const clearSelected = () => {
+    setSelectedPieces(new Set());
+  };
+
   return {
     loading,
     nfts,
     selectedPieces,
     setSelected,
+    clearSelected,
   };
 };

@@ -10,7 +10,7 @@ export const MIGRATING_FROM_TOKEN_IDS =
         '19581845787315820542309529478330392586387484444772608262239428007285976203265',
       ];
 
-export const OLD_TOKEN_TO_NEW_TOKEN_ID_MAP =
+export const OLD_TOKEN_TO_NEW_TOKEN_ID_MAP: { [key: string]: string } =
   process.env.NODE_ENV === 'production'
     ? {}
     : {

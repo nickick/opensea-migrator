@@ -1,7 +1,7 @@
 import Button from 'src/components/Button';
 import { useState } from 'react';
 import { StepText } from 'src/utils/types';
-import { StepBody, StepHeader, StepWrapper } from './Base';
+import { StepBody, StepHeader, StepWrapper } from '../Base';
 import ShinyButton from 'src/components/ShinyButton';
 
 type Props = {

@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import Spinner from 'src/components/Spinner';
 import { useModeSwitch } from 'src/utils/useModeSwitch';
-import { NFT } from 'src/utils/usePieces';
+import { NFT, useSelectPieces } from 'src/utils/usePieces';
 
 type Props = {
   nfts: NFT[];
@@ -20,6 +20,13 @@ const PiecesGallery = ({
   selectedPieces,
 }: Props) => {
   const { mode } = useModeSwitch();
+  const { clearSelected } = useSelectPieces();
+
+  useEffect(() => {
+    clearSelected();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
+
   if (loading) {
     return (
       <div className="text-primaryColor flex items-center">
