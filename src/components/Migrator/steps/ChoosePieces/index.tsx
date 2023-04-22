@@ -1,11 +1,11 @@
 import ShinyButton from 'src/components/ShinyButton';
 import { StepText } from 'src/utils/types';
-import { NFT } from 'src/utils/usePieces';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
 import PiecesGallery from './Gallery';
+import { Nft } from 'alchemy-sdk';
 
 type Props = {
-  nfts: NFT[];
+  nfts: Nft[];
   loading: boolean;
   currentStep: number;
   moveToNextStep: () => void;

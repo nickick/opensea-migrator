@@ -6,7 +6,6 @@ import Spinner from 'src/components/Spinner';
 import { OLD_TOKEN_TO_NEW_TOKEN_ID_MAP } from 'src/utils/tokenIds';
 import { StepText } from 'src/utils/types';
 import { useModeSwitch } from 'src/utils/useModeSwitch';
-import { NFT } from 'src/utils/usePieces';
 import { useAccount } from 'wagmi';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
 import {
@@ -14,6 +13,8 @@ import {
   useMoveTokens,
   useResetTokenWrappability,
 } from './contractInteractions';
+import { Nft } from 'alchemy-sdk';
+import { useConfirming } from 'src/utils/useConfirming';
 
 type WrapPieceProps = {
   image: string;
@@ -40,6 +41,8 @@ const WrapPiece = ({
     mode === 'normal' || mode === 'demo'
   );
 
+  const { confirmed, waitingForConfirmation } = useConfirming(data);
+
   const newTokenIdToOldTokenId: { [key: string]: string } = Object.fromEntries(
     Object.entries(OLD_TOKEN_TO_NEW_TOKEN_ID_MAP).map(([key, value]) => [
       value,
@@ -47,13 +50,22 @@ const WrapPiece = ({
     ])
   );
 
-  const { write: resetToken, isSuccess: finishedResetting } =
-    useResetTokenWrappability(
-      (OLD_TOKEN_TO_NEW_TOKEN_ID_MAP[tokenId]
-        ? tokenId
-        : newTokenIdToOldTokenId[tokenId]) as string,
-      operatorAddress
-    );
+  const {
+    data: resetData,
+    write: resetToken,
+    isSuccess: finishedResetting,
+    isLoading: resetLoading,
+  } = useResetTokenWrappability(
+    (OLD_TOKEN_TO_NEW_TOKEN_ID_MAP[tokenId]
+      ? tokenId
+      : newTokenIdToOldTokenId[tokenId]) as string,
+    operatorAddress
+  );
+
+  const {
+    confirmed: resetConfirmed,
+    waitingForConfirmation: resetWaitingForConfirmation,
+  } = useConfirming(resetData);
 
   const { address } = useAccount();
   const isAdmin = useIsContractAdmin(
@@ -66,16 +78,13 @@ const WrapPiece = ({
   }, [incrementWrappedCount]);
 
   useEffect(() => {
-    if (isAdmin) {
-      if (isSuccess && finishedResetting) {
-        increment();
-      }
-    } else {
-      if (isSuccess) {
-        increment();
-      }
+    if (isAdmin && mode === 'reverse' && confirmed && resetConfirmed) {
+      increment();
+    } else if (confirmed) {
+      increment();
     }
-  }, [isSuccess, isAdmin, finishedResetting, increment]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [confirmed, resetConfirmed, isAdmin]);
 
   return (
     <div className="flex p-2 space-x-4 items-center border rounded-xl">
@@ -86,21 +95,25 @@ const WrapPiece = ({
       <ShinyButton
         className="rounded-full"
         onClick={() => write?.()}
-        disabled={isSuccess}
+        disabled={isSuccess || waitingForConfirmation}
       >
-        {isLoading && <Spinner />}
-        {isSuccess && <>{pre}Wrapped!</>}
-        {!isLoading && !isSuccess && <>{pre}Wrap</>}
+        {isSuccess && confirmed ? <>{pre}Wrapped!</> : <>{pre}Wrap</>}
+        {isLoading || (waitingForConfirmation && <Spinner />)}
       </ShinyButton>
       {isAdmin && (
         <Button
-          disabled={!isAdmin || finishedResetting}
+          disabled={
+            !isAdmin || finishedResetting || resetWaitingForConfirmation
+          }
           onClick={() => {
             resetToken?.();
           }}
           className="rounded-full"
         >
-          Admin detected! Reset Token Wrappability
+          {finishedResetting && resetConfirmed
+            ? 'Token reset!'
+            : 'Admin detected! Reset Token Wrappability'}
+          {resetLoading || (resetWaitingForConfirmation && <Spinner />)}
         </Button>
       )}
     </div>
@@ -113,7 +126,7 @@ type WrapPiecesProps = {
   text: StepText;
   stepOrder: number;
   currentStep: number;
-  nfts: NFT[];
+  nfts: Nft[];
   selectedPieces: Set<string>;
 };
 
@@ -131,7 +144,7 @@ const WrapPieces: React.FunctionComponent<WrapPiecesProps> = ({
   const [completed, setCompleted] = useState(false);
   const [wrappedCount, setWrappedCount] = useState(0);
   function incrementWrappedCount() {
-    setWrappedCount(wrappedCount + 1);
+    setWrappedCount(Math.min(wrappedCount + 1, nfts.length));
   }
 
   useEffect(() => {
@@ -160,17 +173,17 @@ const WrapPieces: React.FunctionComponent<WrapPiecesProps> = ({
             ))}
             {nfts && nfts.map && (
               <div className="flex flex-col">
-                {nfts.map(({ tokenId, image, name }) => {
+                {nfts.map(({ tokenId, media, rawMetadata }) => {
                   if (!selectedPieces.has(tokenId)) {
                     return null;
                   }
                   return (
                     <WrapPiece
                       key={tokenId}
-                      image={image}
+                      image={media[0]?.raw}
                       tokenId={tokenId}
                       incrementWrappedCount={incrementWrappedCount}
-                      name={name}
+                      name={rawMetadata?.name || ''}
                     />
                   );
                 })}

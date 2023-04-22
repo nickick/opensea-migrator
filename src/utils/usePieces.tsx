@@ -2,12 +2,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Context } from 'src/components/Client';
 import { useAccount } from 'wagmi';
 import { useModeSwitch } from './useModeSwitch';
-
-export type NFT = {
-  image: string;
-  name: string;
-  tokenId: string;
-};
+import { Nft } from 'alchemy-sdk';
 
 export const useSelectPieces = () => {
   const { selectedPieces, setSelectedPieces } = useContext(Context);
@@ -39,7 +34,7 @@ export const useGetPieces = () => {
   const [loading, setLoading] = useState(false);
   const { nfts, setNfts } = useContext(Context);
 
-  async function fetchNFTs({ setFn }: { setFn: (nfts: NFT[]) => void }) {
+  async function fetchNFTs({ setFn }: { setFn: (nfts: Nft[]) => void }) {
     if (nfts.length) return nfts;
     if (!loading) {
       setLoading(true);
@@ -48,7 +43,7 @@ export const useGetPieces = () => {
           ? `/api/wallet/${address}/unwrapped`
           : `/api/wallet/${address}/wrapped`
       );
-      const nftRes: NFT[] = await nftResponse.json();
+      const nftRes: Nft[] = await nftResponse.json();
       setFn(nftRes);
       setLoading(false);
     }

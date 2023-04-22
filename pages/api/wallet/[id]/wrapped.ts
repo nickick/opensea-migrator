@@ -1,15 +1,12 @@
 // Small api endpoint to process wallet NFTs for Opensea's contract and the migrating contract.
 
 import { NextApiRequest, NextApiResponse } from 'next';
-import { fetchMoralis } from 'src/utils/fetchMoralis';
+import { fetchNfts } from 'src/utils/fetchNfts';
 
 const fetchWalletNFTs = async (id: string) => {
-  const results = await fetchMoralis(
-    id,
-    process.env.NEXT_PUBLIC_MIGRATE_CREATOR_CONTRACT_ADDRESS || '',
-    process.env.NEXT_PUBLIC_CHAIN_NAME || ''
-  );
-  return results;
+  const { wrappedNFts } = await fetchNfts(id);
+
+  return wrappedNFts;
 };
 
 export default async function handler(

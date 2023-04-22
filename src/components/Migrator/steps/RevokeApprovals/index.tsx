@@ -1,10 +1,11 @@
 import Button from 'src/components/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StepText } from 'src/utils/types';
 import { StepBody, StepHeader, StepWrapper } from '../Base';
 import ShinyButton from 'src/components/ShinyButton';
 import { useModeSwitch } from 'src/utils/useModeSwitch';
 import { useWriteContractApproval } from '../SetApprovals/contractInteractions';
+import { useConfirming } from 'src/utils/useConfirming';
 
 type Props = {
   moveToBeginning: () => void;
@@ -40,6 +41,8 @@ const WrapPieces: React.FunctionComponent<Props> = ({
     false
   );
 
+  const { confirmed, waitingForConfirmation } = useConfirming(data);
+
   return (
     <StepWrapper isActive={isActive}>
       <StepHeader
@@ -57,10 +60,10 @@ const WrapPieces: React.FunctionComponent<Props> = ({
             onClick={() => {
               write?.();
             }}
-            disabled={isLoading || isSuccess}
-            loading={isLoading}
+            disabled={isLoading || waitingForConfirmation}
+            loading={isLoading || waitingForConfirmation}
           >
-            {isSuccess ? text.buttonText : text.buttonConfirmationText}
+            {confirmed ? text.buttonConfirmationText : text.buttonText}
           </ShinyButton>
           <div className="flex space-x-4 justify-self-end self-end absolute bottom-6 right-8">
             <Button onClick={moveBackStep} className="rounded-full">
@@ -68,7 +71,7 @@ const WrapPieces: React.FunctionComponent<Props> = ({
             </Button>
             <ShinyButton
               onClick={moveToBeginning}
-              disabled={isLoading || isSuccess}
+              disabled={!confirmed}
               background="bg-currentStepColor disabled:bg-opacity-20 transition-all"
               className="rounded-full"
             >

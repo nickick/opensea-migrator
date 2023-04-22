@@ -1,13 +1,14 @@
+import { Nft } from 'alchemy-sdk';
 import Image from 'next/image';
 import { useContext, useEffect } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import Spinner from 'src/components/Spinner';
 import { useModeSwitch } from 'src/utils/useModeSwitch';
-import { NFT, useSelectPieces } from 'src/utils/usePieces';
+import { useSelectPieces } from 'src/utils/usePieces';
 
 type Props = {
-  nfts: NFT[];
+  nfts: Nft[];
   loading: boolean;
   setSelected: (token_id: string) => () => void;
   selectedPieces: Set<string>;
@@ -36,6 +37,15 @@ const PiecesGallery = ({
     );
   }
 
+  if (!loading && nfts.length === 0) {
+    return (
+      <div className="text-primaryColor flex items-center">
+        No Seerlight {mode === 'reverse' ? 'wrapped' : 'unwrapped'} pieces
+        found.
+      </div>
+    );
+  }
+
   return (
     <ScrollMenu Footer={Arrows} wrapperClassName="max-w-full">
       {nfts && nfts.map && (
@@ -45,7 +55,7 @@ const PiecesGallery = ({
               nft={nft}
               setSelected={setSelected}
               selected={selectedPieces.has(nft.tokenId) || false}
-              key={`${nft.name}-${id}`}
+              key={`${nft.rawMetadata?.name}-${id}`}
               itemId={id.toString()}
             />
           ))}
@@ -105,7 +115,7 @@ function RightArrow() {
 
 type CardProps = {
   setSelected: (token_id: string) => () => void;
-  nft: NFT;
+  nft: Nft;
   selected: boolean;
   itemId: string;
 };
@@ -113,7 +123,7 @@ type CardProps = {
 function Card({ selected, nft, setSelected }: CardProps) {
   return (
     <div
-      key={nft.image}
+      key={nft.tokenId}
       className={`w-64 h-96 shrink-0 border-4 flex flex-col p-2 cursor-pointer rounded-lg bg-primaryColor transition-all duration-500 mr-4 ${
         selected
           ? 'opacity-100 border-currentStepColor bg-opacity-50'
@@ -122,7 +132,11 @@ function Card({ selected, nft, setSelected }: CardProps) {
       onClick={setSelected(nft.tokenId)}
     >
       <div className="w-full h-96 relative mb-2">
-        <Image src={nft.image} alt={nft.name} layout="fill" />
+        <Image
+          src={nft.media[0]?.raw}
+          alt={nft.rawMetadata?.name}
+          layout="fill"
+        />
       </div>
       <div className="flex space-x-2 items-center">
         <input
@@ -137,7 +151,7 @@ function Card({ selected, nft, setSelected }: CardProps) {
             selected ? 'text-currentStepColor' : 'text-primaryColor'
           }`}
         >
-          {nft.name}
+          {nft.rawMetadata?.name}
         </p>
       </div>
     </div>
