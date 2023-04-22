@@ -12,7 +12,7 @@ import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 
 import '@rainbow-me/rainbowkit/styles.css';
 import { createContext, useState } from 'react';
-import { NFT } from 'src/utils/usePieces';
+import { Nft } from 'alchemy-sdk';
 
 // Configure chains & providers with the Alchemy provider.
 // Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
@@ -41,15 +41,15 @@ type ClientProps = {
 export const Context = createContext({
   mode: 'normal',
   setMode: (mode: 'normal' | 'reverse') => {},
-  nfts: [] as NFT[],
-  setNfts: (nfts: NFT[]) => {},
+  nfts: [] as Nft[],
+  setNfts: (nfts: Nft[]) => {},
   selectedPieces: new Set<string>(),
   setSelectedPieces: (selectedPieces: Set<string>) => {},
 });
 
 const StateProvider = ({ children }: { children: React.ReactNode }) => {
   const [mode, setMode] = useState<'normal' | 'reverse'>('normal');
-  const [nfts, setNfts] = useState<NFT[]>([]);
+  const [nfts, setNfts] = useState<Nft[]>([]);
   const [selectedPieces, setSelectedPieces] = useState<Set<string>>(new Set());
 
   return (

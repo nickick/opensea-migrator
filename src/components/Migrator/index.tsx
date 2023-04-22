@@ -7,8 +7,9 @@ import ChoosePieces from './steps/ChoosePieces';
 import RevokeApprovals from './steps/RevokeApprovals';
 import SetApprovals from './steps/SetApprovals';
 import WrapPieces from './steps/WrapPieces';
-import { NFT, useGetPieces, useSelectPieces } from 'src/utils/usePieces';
+import { useGetPieces, useSelectPieces } from 'src/utils/usePieces';
 import { useModeSwitch } from 'src/utils/useModeSwitch';
+import { Nft } from 'alchemy-sdk';
 
 type StepProps = {
   moveBackStep: () => void;
@@ -16,7 +17,7 @@ type StepProps = {
   moveToBeginning: () => void;
   setSelected: (token_id: string) => () => void;
   selectedPieces: Set<string>;
-  nfts: NFT[];
+  nfts: Nft[];
   loading: boolean;
   stepOrder: number;
   currentStep: number;
